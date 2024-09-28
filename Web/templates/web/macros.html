@@ -1,0 +1,17 @@
+
+
+{% macro CompaniesSliderLogos() %}
+{#    render partners logos#}
+    <div class="row owl-carousel owl-theme partnership-company-slider">
+
+        {% set logos = [ 'allwinner.webp', 'amd.webp', 'amphenol-rf.webp', 'amphenol.webp', 'digikey.webp', 'ebay.webp', 'forlinx.webp', 'huber.webp', 'intel.webp', 'kemet.webp', 'keysight.webp', 'mini-circuits.webp', 'mouser.webp', 'nvidia.webp', 'nxp.webp', 'qualcomm.webp', 'rasberry.webp', 'st.webp', 'ti.webp', 'waveshare.webp'] %}
+        {% for each in logos %}
+            <div class="col-lg-3 col-md-6 col-4 item d-flex justify-content-center align-items-center w-100 h-100">
+                <img src="{{ ('media/partners/'+ each ) | StorageUrl }}"
+                     class="partnership-company-img px-2"
+                     data-each="{{ each }}" alt="{{ each }}"
+                     style="width: 100% !important; height: auto">
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

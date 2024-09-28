@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    نوشته های {{ ctx.author.Username }}
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+
+    <div class="container-fluid">
+        <section class="persian-font">
+            <div class="row justify-content-center align-items-center my-5">
+                <h2 class="text-center my-3">آخرین نوشته های <span class="text-primary text-decoration-underline">{{ ctx.author.Username }}</span></h2>
+                <div class="col-12 col-md-10">
+                    <div class="row">
+                        {% for post in ctx.posts %}
+                            <div class="col-11 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card shadow-md">
+                                <a href="{{ url_for('blog.show_post_by_slug_get', slug=post.Slug) }}">
+        {#                            <img src="{{ 'blog/media/'+post.get_image_at(0) | StorageUrl }}" alt="Image cant be loaded" class="card-img-top inset h-100 w-100">#}
+                                    <img src="https://eeeico.com/wp-content/uploads/2020/04/Capacitor.jpg" alt="Image cant be loaded" class="card-img-top inset h-100 w-100">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">{{ post.Title}}</h5>
+                                    <p class="overflow-hidden text-justify" style="max-height: 100px">
+                                        {{ post.ShortIntro | safe }}
+                                    </p>
+                                    <div class="t-time-info my-2 text-muted d-flex justify-content-between align-items-center flex-wrap fs-0-8">
+                                        <span>
+                                            <i class="bi bi-calendar"></i>
+                                            {{ post.ConvertToJalali(post.CreatedTime) }} |
+                                        </span>
+                                        <span>
+                                            <i class="bi bi-clock"></i>
+                                            زمان مطالعه:
+                                            {{ post.ReadingTime }}
+                                            دقیقه
+                                        </span>
+                                    </div>
+                                    <div class=" d-flex justify-content-center align-items-center w-100">
+                                        <a href="{{ url_for('blog.show_post_by_title_get', title=post.make_url()) }}" class="btn btn-primary col-12 rounded-3 text-white">خواندن</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+           <nav dir="rtl"  class="d-flex justify-content-center align-items-center" aria-label="Page navigation" dir="ltr">
+                <ul class="pagination">
+                        {% if ctx.posts.pages - ctx.current_page  >= 0 and ctx.current_page != 1 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('blog.author_index_get', page=ctx.current_page - 1, username=ctx.author.Username) }}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in ctx.posts.iter_pages(right_edge=1, left_edge=1,right_current=1, left_current=1) %}
+                            {% if page %}
+                                {% if page == ctx.current_page %}
+                                    <li class="page-item">
+                                        <a class="page-link active"
+                                           href="{{ url_for('blog.author_index_get', page=ctx.current_page, username=ctx.author.Username) }}">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="{{ url_for('blog.author_index_get', page=page, username=ctx.author.Username) }}">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if ctx.posts.pages - ctx.current_page > 0 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('blog.author_index_get', page=ctx.current_page + 1, username=ctx.author.Username) }}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+           </nav>
+
+
+
+            </div>
+        </section>
+    </div>
+
+
+
+    {% include 'components/footer.html' %}
+    {% include 'components/mobile-navbar.html' %}
+{% endblock content %}
+
+
+{% block script %}
+{% endblock script %}

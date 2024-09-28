@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+
+
+{% block title %}
+    {{ _('پنل کاربری') }}
+{% endblock title %}
+
+
+{% block style %}
+    {% include 'utils/chartjs.html' %}
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-4">
+            <div class="row justify-content-center align-items-center">
+
+                    <div class="col-6 my-3 fs-4">
+                      <canvas id="users-chart"></canvas>
+                    </div>
+
+                    <div class="col-6 my-3">
+                      <canvas id="orders-chart"></canvas>
+                    </div>
+                    <div class="col-6 my-3 fs-4">
+                      <canvas id="tickets-chart"></canvas>
+                    </div>
+
+                    <div class="col-6 my-3">
+                      <canvas id="test-chart"></canvas>
+                    </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+
+{% block script %}
+    <!--DASHBOARD JS-->
+    <script src="{{ url_for('admin.Serve', filename='/assets/js/dashboard.js') }}"></script>
+{% endblock script %}

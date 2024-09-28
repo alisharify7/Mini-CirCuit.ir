@@ -1,0 +1,130 @@
+<!-- footer -->
+<section class="persian-font mb-4 mb-md-auto">
+
+    <div class="position-relative footer-wave" style="">
+        <div class="bg-dark-hell w-100 py-4 d-flex justify-content-around align-items-center flex-wrap">
+            <div class="d-flex justify-content-center align-items-center mt-5">
+                <a href="{{ url_for('web.index_get') }}" class="navbar-brand mx-3 text-md-start text-center">
+                    <img src="{{ renderLogo() | StorageUrl }}" style="width: 40%; height: 100%" alt="Logo" class="p-0 m-0"/>
+                </a>
+            </div>
+            <div class="d-flex justify-content-center align-items-center mt-5">
+                <a href="#"><i class="text-white mx-2 fs-2 bi bi-telegram"></i></a>
+                <a href="#"><i class="text-white mx-2 fs-2 bi bi-facebook"></i></a>
+                <a href="#"><i class="text-white mx-2 fs-2 bi bi-instagram"></i></a>
+                <a href="#"><i class="text-white mx-2 fs-2 bi bi bi-twitter"></i></a>
+                <a href="#"><i class="text-white mx-2 fs-2 bi bi-youtube"></i></a>
+            </div>
+        </div>
+
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+            </g>
+        </svg>
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center bg-gray footer-section  p-5 pb-md-3">
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto ">
+                <h2 class="text-primary">خدمات</h2>
+                <ul class="list-unstyled p-0">
+                    <li><a href="{{ ShopURL() }}"
+                           class="text-decoration-none text-muted">فروشگاه قطعات الکترونیکی</a></li>
+                     <li><a href="{{ url_for('web.orderPCB.calculator_post') }}"
+                           class="text-decoration-none text-muted">ماشین حساب آنلاین قیمت مدار چاپی (PCB)</a></li>
+                    <li><a href="{{ url_for('web.outer_order.index_get') }}"
+                           class="text-decoration-none text-muted">سفارش محصول از خارج از ایران</a></li>
+                    <li><a href="{{ url_for('auth.login_get') }}"
+                           class="text-decoration-none text-muted">ورود به حساب کاربری</a></li>
+                    <li><a href="{{ url_for('auth.register_get') }}"
+                           class="text-decoration-none text-muted">ساخت حساب کاربری</a></li>
+                </ul>
+            </div>
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto ">
+                <h2 class="text-primary">درباره ما</h2>
+                <ul class="list-unstyled p-0">
+                    <li><a href="{{ url_for('web.about_us_get') }}"
+                           class="text-decoration-none text-muted">درباره ما</a></li>
+                    <li><a href="{{ url_for('web.logo_get') }}"
+                           class="text-decoration-none text-muted">لوگو های ما</a></li>
+                    <li><a href="{{ url_for('web.contact_us_get') }}"
+                           class="text-decoration-none text-muted">تماس با ما</a></li>
+                    <li><a href="{{ url_for('web.job_get') }}"
+                           class="text-decoration-none text-muted">فرصت های شغلی</a></li>
+                    <li><a href="{{ url_for('web.faq_get') }}"
+                           class="text-decoration-none text-muted">سوالات متداول</a></li>
+                </ul>
+            </div>
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto ">
+                <h2 class="text-primary">پشتیبانی</h2>
+                <ul class="list-unstyled p-0">
+                    <li><a href="{{ url_for('web.contact_us_get') }}"
+                           class="text-decoration-none text-muted">تماس با ما</a></li>
+                    <li><a href="{{ url_for('web.proxy_get') }}"
+                           class="text-decoration-none text-muted">مراکز گارانتی</a></li>
+                    <li><a href="{{ url_for('web.proxy_get') }}"
+                           class="text-decoration-none text-muted">رهگیری سفارشات</a></li>
+                    <li><a href="{{ url_for('web.proxy_get') }}"
+                           class="text-decoration-none text-muted">نمونه طراحی ها</a></li>
+                    <li><a href="{{ url_for('web.proxy_get') }}"
+                           class="text-decoration-none text-muted">فروشگاه محصولات</a></li>
+                </ul>
+            </div>
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto ">
+                <h2 class="text-primary">اطلاع رسانی</h2>
+                <ul class="list-unstyled p-0">
+                    <li><a href="{{ url_for('blog.index_get') }}"
+                           class="text-decoration-none text-muted">مشاهده وبلاگ</a></li>
+                    <li><a href="" class="text-decoration-none text-muted"> خبرنامه</a></li>
+                    <li><a href="" class="text-decoration-none text-muted">جشنواره ها</a></li>
+                </ul>
+                {% include 'components/newsLetterForm.html' %}
+            </div>
+
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto">
+                <h3 class="text-primary">دفتر تهران</h3>
+                <ul class="list-unstyled p-0">
+                    <li class="text-muted">آدرس: تهران، اتوبان رسالت غرب به شرق، نرسیده به میدان رسالت، خیابان کرمان، نبش کوچه رحیم صافی، پلاک۱، واحد۱</li>
+                    <li class="text-muted">(+98) 21 12312312</li>
+                    <li class="text-muted">(+98) 21 12312312</li>
+                    <li class="text-muted">(+98) 21 12312312</li>
+                </ul>
+            </div>
+
+            <div class="px-auto px-md-5 col-lg-3 col-md-6 col-11 my-2 my-md-auto ms-auto d-flex justify-content-around align-items-center">
+                <a target="_blank" href="https://rtbf.ir/"><img style="width: 80px" class="bg-warning rounded p-2" src="https://rtbf.ir/assets/img/footer-logo.png"></a>
+                <a target="_blank" href=""><img style="width: 75px" src="https://www.ecunion.ir/bundles/pouyasoft/home/img/logo.png"></a>
+                <img style="width: 150px" src="https://eeeico.com/wp-content/uploads/2020/04/%D8%B3%D8%A7%D9%85%D8%A7%D9%86%D8%AF%D9%87%DB%8C-%D9%88-%D8%A7%DB%8C%D9%86%D9%85%D8%A7%D8%AF.png">
+            </div>
+
+
+            <div class="col-12">
+                <hr class="bg-blue">
+            </div>
+
+            <div class="col-10">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-12 col-md-6 text-md-start text-center my-3 my-md-auto">
+                        <p class="text-muted">© تمامی حقوق مادی و معنوی محفوظ میباشد.</p>
+                        <img class="w-25" src="{{ renderLogo('dark-bg') | StorageUrl }}">
+                    </div>
+                    <div class="col-12 col-md-6 my-3 my-md-auto" dir="ltr">
+                        {% include 'components/footer_company_images.html' %}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+<!-- end of footer -->
+

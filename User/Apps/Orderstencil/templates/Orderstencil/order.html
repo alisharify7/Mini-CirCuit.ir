@@ -1,0 +1,172 @@
+{% extends 'user/base.html' %}
+
+
+{% block title %}
+    Stencil {{ _('سفارش ') }}
+{% endblock title %}
+
+
+{% block style %}
+    <style>
+        .blink {
+            animation: blink-animation 2s steps(5, start) infinite;
+            -webkit-animation: blink-animation 1s steps(5, start) infinite;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        @-webkit-keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-3">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-11">
+                    <h1 class="text-center my-3">سفارش خرید <span class="text-warning">Stencil</span></h1>
+                </div>
+                <div class="col-12 col-sm-11">
+                    <form method="POST" action="{{ url_for('user.orderstencil.index_post') }}"
+                          enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="alert alert-warning">
+                            <p class="fs-5 m-0 text-center blink">
+                                با توجه به نوسان قیمت در بازار به طور موقت امکان
+                                محاسبه قیمت لحظه ای فراهم نمی باشد و مشتریان گرامی باید ابتدا سفارش خود را ثبت کنید و
+                                کارشناسان ما با توجه به نوع سفارش قیمت سفارش رو اعلام می کنند
+                            </p>
+                        </div>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.TYPE.label }}:
+                            </p>
+                            {{ form.TYPE() }}
+                            {% if form.TYPE.errors %}
+                                <ul>
+                                    {% for each in form.TYPE.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.SIZE.label }}:
+                            </p>
+                            {{ form.SIZE() }}
+                            {% if form.SIZE.errors %}
+                                <ul>
+                                    {% for each in form.SIZE.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.SIDE.label }}:
+                            </p>
+                            {{ form.SIDE() }}
+                            {% if form.SIDE.errors %}
+                                <ul>
+                                    {% for each in form.SIDE.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.QUANTITY.label }}:
+                            </p>
+                            {{ form.QUANTITY() }}
+                            {% if form.QUANTITY.errors %}
+                                <ul>
+                                    {% for each in form.QUANTITY.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.THICKNESS.label }}:
+                            </p>
+                            {{ form.THICKNESS() }}
+                            {% if form.THICKNESS.errors %}
+                                <ul>
+                                    {% for each in form.THICKNESS.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.FIDUCIALS.label }}:
+                            </p>
+                            {{ form.FIDUCIALS() }}
+                            {% if form.FIDUCIALS.errors %}
+                                <ul>
+                                    {% for each in form.FIDUCIALS.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.REQUEST.label }}:
+                            </p>
+                            {{ form.REQUEST() }}
+                            {% if form.REQUEST.errors %}
+                                <ul>
+                                    {% for each in form.REQUEST.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+                        <label class="w-100 my-2" dir="ltr">
+                            <p class="fs-5 m-0" dir="ltr">
+                                {{ form.FILE.label }}:
+                            </p>
+                            {{ form.FILE() }}
+                            {% if form.FILE.errors %}
+                                <ul>
+                                    {% for each in form.FILE.errors %}
+                                        <li class="text-danger text-end">{{ each }}🔴</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                        </label>
+
+                        {{ form.SUBMIT() }}
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock body %}

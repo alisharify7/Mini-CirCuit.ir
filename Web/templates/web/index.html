@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Mini Circuits | فروش برد های الکترونیکی در ایران
+{% endblock title %}
+
+
+{% block style %}
+<!-- page custom script/style  -->
+{% include 'utils/owl-carousel.html' %}
+<link rel="stylesheet" href="{{ '/index/css/index.css' | StorageUrl }}"/>
+<!-- end of page custom script/style  -->
+{% endblock style %}
+
+
+
+{% block content %}
+    {% include 'components/header.html' %}
+
+<!-- index carousel -->
+<div style="max-height: 65vh; width: 100%" class="custom-owl">
+    <div class="owl-carousel owl-theme owl-carousel-slider position-relative">
+        <div class="item">
+            <img src="{{ 'index/media/slider3.webp' | StorageUrl }}"
+                 class="w-100 h-100"
+                 style="max-height: 70vh" alt=""/>
+        </div>
+        <div class="item">
+            <img src="{{ 'index/media/slider1.webp' | StorageUrl }}"
+                 class="w-100 h-100"
+                 style="max-height: 70vh" alt=""/>
+        </div>
+        <div class="item">
+            <img src="{{ 'index/media/slider2.webp' | StorageUrl }}"
+                 class="w-100 h-100"
+                 style="max-height: 70vh" alt=""/>
+        </div>
+    </div>
+</div>
+<!-- end of index carousel -->
+
+<!-- card services -->
+<section class="persian-font">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-content-center">
+
+                <!-- about  -->
+                <div class="col-12 bg-dark-hell py-5">
+                    <div class="row justify-content-center align-content-center">
+                        <div class="col-lg-10 col-md-10 col-11">
+                            <img data-aos="fade-left" data-aos-duration="1500"
+                                 src="{{ 'media/logo/right-logo.png' | StorageUrl }}" class="w-25"
+                                 alt="mini-circuits.ir logo"/>
+                            <p data-aos="fade-up" data-aos-duration="1900" class="text-white mt-3" style="text-align: justify">
+                            شرکت<span class="text-warning"> فناوری هوشمند زیبا</span> با همکاری تعدادی از مهندسین و دکترای زمینه الکترونیک، مخابرات، دیجیتال، کامپیوتر و مکانیک با بیش از یک دهه تجربه شروع به فعالیت نموده است.
+                            این شرکت در زمینه ی طراحی مدارهای الکترونیکی و مخابراتی، طراحی مکانیک، تامین قطعات از کارخانه ها و شرکت های اصلی به صورت مستقیم، مونتاژ برد های مخابراتی و الکترونیکی به صورت دستی و ماشینی، تست انواع برد ها و ماژول های مخابراتی و الکترونیکی، برنامه نویسی انواع پردازشگر ها و در کل پیاده سازی پروژه های الکترونیک و مخابرات از صفر تا صد را دارا می باشد.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of about -->
+
+
+                <!-- services -->
+                <div class="col-12 bg-gray py-5" style="overflow-x: hidden">
+                    <div class="row justify-content-center align-content-center">
+                        <div class="col-sm-10 col-12">
+                            <div class="row">
+
+                                <div class="col-12 my-2 d-flex justify-content-between align-content-center position-relative overflow-hidden">
+                                    <h2 class="text-center text-muted ">خدمات و سرویس ها</h2>
+                                    <a class="m-0 p-0 text-orange fs-5 text-center mt-2 text-decoration-none"
+                                       target="_blank"
+                                       href="{{ url_for('web.about_us_get') }}">درباره ما<i
+                                            class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/board.webp' | StorageUrl }}"
+                                             loading="lazy"
+                                             class="card-img-top mx-auto position-relative services-images" alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-4">
+                                            طراحی و ساخت تجهیزات الکترونیکی و مخابراتی
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/smartHome.webp' | StorageUrl }}"
+                                             loading="lazy" class="card-img-top rounded mx-auto position-relative"
+                                             alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-3">
+                                            طراحی و تولید محصولات خانه هوشمند
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/5G.webp' | StorageUrl }}"
+                                             loading="lazy" class="card-img-top mx-auto position-relative" alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-3">طراحی و
+                                            ساخت مودم های فیبرنوری و 5G</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/application.webp' | StorageUrl }}"
+                                             loading="lazy" class="card-img-top mx-auto position-relative" alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-4">
+                                            توسعه و تولید نرم افزار و سرویس های ارتباطی
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/security.webp' | StorageUrl }}"
+                                             loading="lazy" class="card-img-top mx-auto position-relative" alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-4">طراحی و
+                                            توسعه نرم افزار های حضور و غیاب و امنیتی</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 my-2" data-aos="fade-down">
+                                    <div class="card shadow card-bs rounded-5">
+                                        <img src="{{ '/index/media/testing-and-creating.webp' | StorageUrl }}"
+                                             loading="lazy" class="card-img-top mx-auto position-relative" alt=""/>
+                                        <p class="text-center position-absolute bottom-0 w-100 fw-bold fs-4">
+                                            تست و کنتنرل کیفیت محصولات
+                                        </p>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  end of services -->
+
+            </div>
+        </div>
+    </section>
+<!-- end of  card services -->
+
+
+<!-- 24/7 send over world -->
+<section class="persian-font my-5">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+
+                <div class="col-lg-5 col-md-10 col-11">
+                    <div class="buy-from-every-where owl-carousel owl-theme position-relative">
+                        <img src="{{ '/index/media/buy-from-everywherer.jpg' | StorageUrl }}" class="item img-fluid" style="max-height: 100% ;width: 100%"/>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-10 col-11 d-flex flex-column justify-content-start align-items-start"
+                     data-aos="fade-up">
+                    <p class="text-orange m-0 fs-4">سفارش از سرار نقاط جهان</p>
+                    <h1 class="text-blue">تحویل درب منزل</h1>
+                    <p class="text-muted fs-5" style="text-align: justify; line-height: 1.8">
+                        با توجه به وجود قطعات کپی و غیراصلی در بازارهای داخلی و چین و مشکلات فراوان در جهت خرید قطعات اصلی به دلیل تحریم های کشور، این شرکت تصمیم بر آن گرفت که اقدام به تاسیس تعدادی دفتر در کشورهای تامین کننده نماید تا قطعات اصلی را به صورت مستقیم تامین کند.
+                            با توجه به وجود این مشکل مشابه در شرکت های همکار، این شرکت توانایی تامین قطعات مورد نیاز شرکت های همکار را با ضمانت صد در صد اصلی بودن قطعات ، بهترین قیمت و کمترین زمان تحویل را دارد.
+                        این شرکت در اکثر شرکت های تولید کننده و توزیع کننده قطعات الکترونیکی حساب مستقیم داشته و همچنین امکان خرید قطعات اصلی از فروشگاه های معتبری مانند <span class="text-primary">Mouser</span>, <span class="text-danger">Digikey</span> به صورت مستقیم نیز وجود دارد.
+                    </p>
+
+                    <div class="d-flex justify-content-around align-items-center w-100 flex-wrap">
+                        <a href="{{ url_for('web.contact_us_get') }}" class="btn btn-primary py-2 my-2 px-5 px-sm-3">
+                            <i class="fa-solid fa-phone"></i>
+                            ارتباط با ما
+                        </a>
+                        <a href="{{ url_for('web.outer_order.index_get') }}"
+                           class="btn btn-warning py-2 my-2 px-5 px-sm-3">
+                            <i class="fa-solid fa-cart-shopping"></i>سفارش از خارج
+                        </a>
+                        <a href="{{ ShopURL() }}" target="_blank" class="btn btn-primary py-2 my-2 px-5 px-sm-3">
+                            <i class="fa-solid fa-tags"></i> فروشگاه محصولات الکترونیکی
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- end of 24/7 send over world -->
+
+
+<!-- import world -->
+<section class="persian-font my-5 mb-0">
+        <div class="container-fluid bg-gray py-5">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 text-center m-3">
+                    <h2 class="text-primary"> واردات قطعات الکترونیکی و خاص از سراسر جهان</h2>
+                    <p class="text-muted">واردات قطعات الکترونیکی و تجاری بی واسطه و تحویل در ایران </p>
+                </div>
+
+                <div class="col-11 col-md-4 col-lg-3 my-2">
+                    <div class="card" >
+                        <div class="position-relative text-decoration-none import-text bg-gray cursor-pointer">
+                            <img  style="height: 240px; border-radius: 20px" src="{{ 'media/flag/china.webp' | StorageUrl  }}" loading="lazy" class="card-img-top img-fluid news-slider-img"/>
+                            <p class="position-absolute bottom-0 end-0 start-0 text-white fs-2 w-100 h-100 d-flex justify-content-center align-items-center m-0">از چین</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-11 col-md-4 col-lg-3 my-2">
+                    <div class="card" >
+                        <div class="position-relative text-decoration-none import-text bg-gray cursor-pointer">
+                            <img  style="height: 240px; border-radius: 20px" src="{{ 'media/flag/dubai.webp' | StorageUrl  }}" loading="lazy" class="card-img-top img-fluid news-slider-img"/>
+                            <p class="position-absolute bottom-0 end-0 start-0 text-white fs-2 w-100 h-100 d-flex justify-content-center align-items-center m-0">از دبی</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-11 col-md-4 col-lg-3 my-2">
+                    <div class="card" >
+                        <div class="position-relative text-decoration-none import-text bg-gray cursor-pointer">
+                            <img  style="height: 240px; border-radius: 20px" src="{{ 'media/flag/us.webp' | StorageUrl  }}" loading="lazy" class="card-img-top img-fluid news-slider-img"/>
+                            <p class="position-absolute bottom-0 end-0 start-0 text-white fs-2 w-100 h-100 d-flex justify-content-center align-items-center m-0">از آمریکا</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+<!-- end of import world -->
+
+
+<!-- manufacture pcb -->
+<section class="persian-font mx-0 award-section manufacture-video-container">
+    <div class="video-container">
+    <video autoplay muted loop class="">
+        <source src="{{ 'index/media//manufacture.mp4' | StorageUrl }}" type="video/mp4" />
+    </video>
+    <div class="container-fluid position-relative">
+            <div class="row justify-content-center align-content-center video-container-background-dark py-5">
+                <div class="col-10 my-3">
+                    <h2 class="text-center text-warning fs-1 border-bottom fw-bold">سفارش از تمام دنیا با بهترین کیفیت</h2>
+                </div>
+                <div class="col-10 my-3 d-flex flex-column justify-content-center align-items-center">
+                    <p class="text-white text-center my-2 fw-bold">
+                        سفارش برد مدار چاپی از چین دارای کیفیت بسیار بالاتری نسبت به داخل بوده و همچنين امکان ساخت برخی طراحی های خاص در داخل کشور وجود ندارد. علاوه بر این قیمت تمام شده برد تولیدی در چین در برخی موارد از داخل نیز ارزان تر شده و در کل دارای قیمت مناسبی می باشد. همچنين تست Microsection ، امپدانس و ... نیز با هزینه ی بسیار کمی قابل انجام بوده و روی تمامی برد ها تست الکتریکال صورت می‌پذیرد.
+                        برای یکبار سفارش های بردهای خود را به ما بسپارید و کیفیت را تجربه کنید.
+                    </p>
+                    <a class="btn btn-primary" href="{{ url_for('web.orderPCB.pcb_get') }}">ثبت سفارش PCB </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- end of manufacture pcb -->
+
+
+<!-- blog -->
+<section class="persian-font bg-gray py-4">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-12 my-5 py-4">
+                    <div class="row justify-content-center align-items-center">
+                        <div data-aos="fade-down" class="col-lg-10 col-12 my-2 d-flex justify-content-between align-content-center">
+                            <h2 class="text-center text-muted">آخرین مطالب وبلاگ</h2>
+                            <a class="m-0 p-0 text-orange fs-5 text-center mt-2 text-decoration-none"
+                               href="{{ url_for('blog.index_get') }}" target="_blank">مشاهده وبلاگ<i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-10 col-12">
+                            <div class="blog-news-slider owl-carousel owl-theme position-relative custom-owl" data-aos="fade-up">
+                                <div class="card">
+                                    <a href="#BLOG" target="_blank" class="position-relative text-decoration-none news-anchor-link">
+                                        <img style="border-radius: 20px" g src="https://eeeico.com/wp-content/uploads/2020/04/Capacitor.jpg" loading="lazy" class="card-img-top img-fluid news-slider-img"/>
+                                        <p class="position-absolute bottom-0 end-0 start-0 me-4 mb-5 text-white fs-5 news-slider-paragraph ms-5">خازن پیست؟</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- end of  blog -->
+
+<!-- contact us -->
+<section class="persian-font my-5 pt-5">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h2 class="text-center text-orange display-3" data-aos="fade-left">ارتباط با ما</h2>
+        <p class="text-blue h3" data-aos="fade-right">آیا سوالی دارید؟</p>
+    </div>
+    {% include "components/contact-us-form.html" %}
+</section>
+<!-- end of contact us -->
+
+<!-- partnership company  -->
+{% from 'macros.html' import CompaniesSliderLogos %}
+<section class="mt py-5 persian-font bg-gray">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-8 col-11">
+                <h2 class="text-center mt-3" data-aos="fade-down" data-aos-duration="3000">
+                    {{ _('خرید از تمامی برند های معتبر دنیا') }}
+                </h2>
+            </div>
+            <div class="col-md-8 col-11" data-aos="fade-down">
+                {{ CompaniesSliderLogos() }}
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column justify-content-center align-items-center" data-aos="fade-up"
+         data-aos-duration="1500">
+        <a class="text-center text-danger"
+           href="{{ url_for('web.proxy_get') }}">+{{ _(' درخواست خرید سفارشی') }}</a>
+    </div>
+</section>
+<!-- end of partnership company  -->
+
+
+    {% include 'components/footer.html' %}
+    {% include 'components/mobile-navbar.html' %}
+{% endblock content %}
+
+
+{% block script %}
+    <script>
+        ShowLoadingPageAnimation();
+    </script>
+    <script src="{{ 'index/js/index.js' | StorageUrl }}"></script>
+{% endblock script %}

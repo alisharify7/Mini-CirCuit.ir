@@ -1,0 +1,100 @@
+{{ form.hidden_tag() }}
+
+<div class="col-12 col-sm-6 col-md-4 my-2 my-sm-auto">
+    <span class="text-primary mt-3">{{ form.Length.label }}</span>
+    {{ form.Length() }}
+</div>
+<div class="col-12 col-sm-6 col-md-4 my-2 my-sm-auto">
+    <span class="text-primary mt-3">{{ form.Width.label }}</span>
+    {{ form.Width() }}
+</div>
+
+<div class="col-12 col-sm-12 col-md-4 my-2">
+    <span class="text-primary mt-3">{{ form.PanelStatus.label }}</span>
+    {{ form.PanelStatus() }}
+</div>
+
+<div class="col-12 col-sm-4 my-2">
+    <span class="text-primary mt-3">{{ form.Quantity.label }}</span>
+    {{ form.Quantity() }}
+</div>
+
+<div class="col-12 col-sm-4 my-2">
+    <span class="text-primary mt-3">{{ form.LayerNumber.label }}</span>
+    {{ form.LayerNumber() }}
+</div>
+
+
+<div class="col-12 col-sm-4 my-2">
+    <span class="text-primary mt-3">{{ form.Thickness.label }}</span>
+    {{ form.Thickness() }}
+</div>
+
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3">{{ form.FinalCover.label }}</span>
+    {{ form.FinalCover() }}
+</div>
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3" dir="rtl">{{ form.PrintColor.label }}</span>
+    {{ form.PrintColor() }}
+</div>
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3">{{ form.FiberType.label }}</span>
+    {{ form.FiberType() }}
+</div>
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3">{{ form.MetalThickness.label }}</span>
+    {{ form.MetalThickness() }}
+</div>
+
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3">{{ form.ProductHelperColor.label }}</span>
+    {{ form.ProductHelperColor() }}
+</div>
+<div class="col-12 col-sm-6 my-2">
+    <span class="text-primary mt-3">{{ form.LayerPosition.label }}</span>
+    {{ form.LayerPosition() }}
+</div>
+<div class="col-6  my-2 ">
+    <span class="text-primary mt-3">{{ form.MicrosectionTest.label }}</span>
+    {{ form.MicrosectionTest() }}
+</div>
+<div class="col-6 my-2 ">
+    <span class="text-primary mt-3">{{  form.ElectricalTest.label }}</span>
+    {{ form.ElectricalTest() }}
+    <p class="text-center text-muted">تست الکتریکال <span class="text-danger">رایگان</span> می باشد</p>
+</div>
+
+{% if form.show_file %}
+
+<div dir="rtl" class="col-12 form-check form-switch d-flex justify-content-between align-items-center my-3 cursor-pointer ">
+    <label class="form-check-label" for="attachment-file">ارسال فایل پیوست</label>
+    <input class="form-check-input fs-4 m-0 " type="checkbox" role="switch" id="attachment-file">
+</div>
+
+<div class="col-12 my-3 d-none" dir="ltr" id="file-container">
+    {{ form.File() }}
+</div>
+    {% if form.File.errors %}
+    <ul>
+        {% for err in form.File.errors %}
+            <li class="text-danger">{{ err }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+<script>
+    const have_file = document.querySelector("#attachment-file");
+    const file_container = document.querySelector("#file-container");
+    have_file.addEventListener("change", e=>{
+        if (have_file.checked){
+            file_container.classList.remove("d-none")
+        }else{
+            file_container.classList.add("d-none")
+        }
+    })
+</script>
+
+{% endif %}
+
+{{ form.Submit() }}

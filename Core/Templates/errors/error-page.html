@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ ctx.title }}
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+
+    <div class="persian-font d-flex flex-column justify-content-center align-items-center my-5">
+        <img class="my-4 mx-3" style="max-width: 600px !important; max-height: 600px !important;"
+             src="{{ ctx.image | StorageUrl }}">
+        <h1 class="text-center fs-1">{{ ctx.title }}</h1>
+        <p class="text-muted text-center">{{ ctx.caption }}</p>
+        <span class="text-center alert alert-secondary" dir="ltr">{{ request.url }}</span>
+        <a href="{{ url_for('web.index_get') }}" class="btn btn-primary text-center">بازگشت به صفحه اصلی</a>
+    </div>
+
+    {% include 'components/footer.html' %}
+{% endblock %}
+
+
+{% block script %}
+{% endblock script %}

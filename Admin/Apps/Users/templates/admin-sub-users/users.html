@@ -1,0 +1,106 @@
+{% extends 'admin/base.html' %}
+
+
+{% block title %}
+    کاربران
+{% endblock title %}
+
+
+{% block style %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    {% include 'utils/datatables.html' %}
+    <style>
+    .cursor-pointer:hover{
+        cursor: pointer;
+    }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-4">
+            <div class="row justify-content-center align-items-center">
+            <div class="col-12">
+                <p class="text-center my-3 text-warning h1">{{ _('لیست کاربران') }}</p>
+            </div>
+
+                <div class="col-12 my-3 fs-4">
+                    <table dir="rtl" id="example" class="table table-hover table-bordered table-secondary overflow-hidden" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>FirstName</th>
+                                    <th>LastName</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Active</th>
+                                </tr>
+                            </thead>
+                            <tbody class="overflow-hidden">
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="UserModalINFO" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header justify-content-between" dir="ltr">
+        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="UserModalINFO">مشخصات کاربر</h1>
+      </div>
+      <div class="modal-body">
+        <input class="form-control my-3 username" disabled type="text" placeholder="Username">
+        <input class="form-control my-3 firstname" disabled type="text" placeholder="FirstName">
+        <input class="form-control my-3 lastname" disabled type="text" placeholder="LastName">
+        <input class="form-control my-3 address" disabled type="text" placeholder="Address">
+        <input class="form-control my-3 email" disabled type="text" placeholder="Email">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        <button type="button" class="btn btn-primary">ویرایش</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+    <script>
+        new DataTable('#example', {
+            ajax: '{{ url_for('admin.users.api_get_users') }}',
+            serverSide: true,
+            columns: [
+                { data: 'Username' ,},
+                { data: 'FirstName',},
+                { data: 'LastName' ,},
+                { data: 'Address' ,},
+                { data: 'Email' },
+                { data: 'Status', orderable:false, searchable:false},
+            ],
+            responsive: true,
+            nowrap: false,
+           rowCallback: function(row, data, index) {
+                $(row).attr("data-key", data.PublicKey);
+                $(row).addClass("cursor-pointer");
+                $(row).on("click", e=>{
+                    let key = (e.currentTarget.dataset.key);
+                    const UserModal = new bootstrap.Modal(document.querySelector('#UserModalINFO'));
+                    $(".username").attr("value",data.Username)
+                    $(".firstname").attr("value",data.FirstName)
+                    $(".lastname").attr("value",data.LastName)
+                    $(".email").attr("value",data.Email)
+                    $(".address").attr("value",data.Address)
+                    UserModal.show()
+                })
+
+            }
+
+        })
+    </script>
+{% endblock script %}

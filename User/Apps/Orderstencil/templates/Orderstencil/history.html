@@ -1,0 +1,138 @@
+{% extends 'user/base.html' %}
+
+
+{% block title %}
+    {{ _('سفارشات') }}
+{% endblock title %}
+
+
+{% block style %}
+    <!--Ticket History js -->
+    <script src="{{ url_for('user.Serve', filename='/assets/js/history-stencil-orders.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    {% include 'utils/sweetalert.html' %}
+
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-4 my-md-5">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-11">
+                    <h2 class="text-center my-3">{{ _('سابقه سفارشات') }}</h2>
+                </div>
+                <div class="col-12">
+                    <table class="shadow-sm table table-responsive table-bordered table-hover table-primary">
+                        <thead>
+                        <th class="d-none d-md-table-cell">{{ _('کد پیگیری') }}</th>
+                        <th class="">{{ _('تاریخ ثبت') }}</th>
+                        <th>{{ _('وضعیت') | truncate(15, True, "...") }}</th>
+                        <th class="d-none d-md-table-cell" class="">{{ _('فایل') | truncate(15, True, "...") }}</th>
+                        <th></th>
+                        </thead>
+                        <tbody>
+                        {% for record in ctx.records %}
+                            <tr title="کد پیگیری: {{ record.PublicKey }}" data-ticket-key="{{ record.PublicKey }}"
+                                class="ticket-row cursor-pointer">
+                                <td class="d-none d-md-table-cell">
+                                    <button class="btn btn-info"
+                                            title="{{ record.PublicKey }}">{{ record.PublicKey.replace("-", "") }}</button>
+                                </td>
+                                <td>{{ record.ConvertToJalali(record.CreatedTime) }}</td>
+                                <td>{{ record.get_status() }}</td>
+                                <td class="d-none d-md-table-cell">
+                                    {% if record.File %}
+                                        <span class=""
+                                              title="{{ record.File[33:] }}">{{ record.File[33:] | truncate(15, True, "...") }}</span>
+                                    {% else %}
+                                        <span class="btn bg-warning">ندارد</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button onclick="ShowModalOrderInfo(`{{ record.PublicKey }}`); return null;"
+                                            class="btn btn-primary">مشاهده
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                    <nav dir="ltr" class="d-flex justify-content-center align-items-center">
+                        <ul class="pagination">
+
+                            {% if ctx.records.pages - ctx.current_page >= 0 and ctx.current_page != 1 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ url_for('user.orderstencil.history_get', page=ctx.current_page - 1) }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in ctx.records.iter_pages(right_edge=1, left_edge=1,right_current=1, left_current=1) %}
+                                {% if page %}
+                                    {% if page == ctx.current_page %}
+                                        <li class="page-item">
+                                            <a class="page-link active"
+                                               href="{{ url_for('user.orderstencil.history_get', page=page) }}">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="{{ url_for('user.orderstencil.history_get', page=page) }}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if ctx.records.pages - ctx.current_page > 0 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ url_for('user.orderstencil.history_get', page=ctx.current_page + 1) }}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <div id="modal-order" class="modal fade persian-font">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <span>{{ _('کد پیگیری') }}: <span id="TrackingCode"></span> </span>
+                </div>
+                <div class="modal-body p-1" style="max-height: 450px;">
+                    <div>
+                        <table class="table table-responsive table-bordered ">
+                            <tbody id="modalOrderTbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-dismiss="modal">{{ _('خروج') }}</button>
+                    <span class=""> - {{ _('سوالی دارید؟') }}? - <a class="btn btn-success"
+                                                                    href="{{ url_for('user.send_ticket_get') }}">{{ _('ارسال تیکت') }}</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+
+{% block script %}
+
+{% endblock script %}

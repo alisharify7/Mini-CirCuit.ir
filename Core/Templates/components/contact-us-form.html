@@ -1,0 +1,65 @@
+<!-- contact us -->
+<div class="container-fluid">
+    <div class="row justify-content-around align-items-center">
+        <div class="col-lg-8 col-md-10 col-11" data-aos-duration="3500" data-aos="zoom-in">
+            <form action="{{ url_for('web.contact_us_post') }}" class="m-0 p-0" method="POST">
+                {% with form = ContactUsForm() %}
+                <label class="w-100 my-2">
+                    {{ form.hidden_tag() }}
+                    <span class="h4">{{ form.Name.label }}</span>
+                    {{ form.Name }}
+                    {% if form.Name.errors %}
+                        <ul>
+                            {% for err in form.Name.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </label>
+
+                <label class="w-100 my-2">
+                    <span class="h4">{{ form.Email.label }}</span>
+                    {{ form.Email() }}
+                    {% if form.Email.errors %}
+                        <ul>
+                            {% for err in form.Email.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </label>
+
+                <label class="w-100 my-2">
+                    <span class="h4">{{ form.Title.label }}</span>
+                    {{ form.Title() }}
+                    {% if form.Title.errors %}
+                        <ul>
+                            {% for err in form.Title.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </label>
+
+                <label class="w-100 my-2">
+                    <span class="h4">{{ form.Message.label }}</span>
+                    {{ form.Message() }}
+                    {% if form.Message.errors %}
+                        <ul>
+                            {% for err in form.Message.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </label>
+                <div class="my-2 d-flex justify-content-center align-items-center">
+                    {{ captcha.render_captcha(model_name="g-captcha2") }}
+                </div>
+                {{ form.Submit() }}
+
+                {% endwith %}
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end of contact us -->

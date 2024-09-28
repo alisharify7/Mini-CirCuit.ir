@@ -1,0 +1,94 @@
+{% extends 'user/base.html' %}
+
+
+{% block title %}
+    ارسال تیکت پشتیبانی
+{% endblock title %}
+
+
+{% block style %}
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-3 my-md-5 pt-md-5 pt-3">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-11">
+                    <h2 class="text-center text-primary">ارسال تیکت پشتیبانی</h2>
+                </div>
+                <div class="col-12 col-sm-11">
+                    <form method="POST" action="{{ url_for('user.send_ticket_post') }}" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <label class="w-100 my-2">
+                            {{ form.Title.label }}
+                            {{ form.Title() }}
+                            {% if form.Title.errors %}
+                                <ul>
+                                    {% for err in form.Title.errors %}
+                                        <li>{{ err }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+                        <label class="w-100 my-2">
+                            {{ form.Caption.label }}
+                            {{ form.Caption() }}
+                            {% if form.Caption.errors %}
+                                <ul>
+                                    {% for err in form.Caption.errors %}
+                                        <li>{{ err }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+
+                        <div dir="rtl" class="my-2 form-check form-switch d-flex justify-content-between align-items-center my-3 cursor-pointer ps-0">
+                            <label class="form-check-label" for="attachment-file">ارسال فایل پیوست</label>
+                            <input class="form-check-input fs-4 m-0" type="checkbox" role="switch" id="attachment-file">
+                        </div>
+
+                        <div class=" my-3 d-none" dir="ltr" id="file-container">
+                            {{ form.File() }}
+                            <p class="text-muted text-center my-2" dir="rtl">حداکثر فایل ارسالی 16MB می باشد</p>
+                            <p class="text-center text-muted" dir="rtl">پسوند فایل های مورد تایید ارسالی  {{ form.File.ext }} می باشد </p>
+                        </div>
+                            {% if form.File.errors %}
+                            <ul>
+                                {% for err in form.File.errors %}
+                                    <li class="text-danger">{{ err }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                        <script>
+                            const have_file = document.querySelector("#attachment-file");
+                            const file_container = document.querySelector("#file-container");
+                            have_file.addEventListener("change", e=>{
+                                if (have_file.checked){
+                                    file_container.classList.remove("d-none")
+                                }else{
+                                    file_container.classList.add("d-none")
+                                }
+                            })
+                        </script>
+
+                        <label class="w-100 my-2">
+                            {{ form.Submit() }}
+                                {% if form.Submit.errors %}
+                                <ul>
+                                    {% for err in form.Submit.errors %}
+                                        <li>{{ err }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </label>
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock body %}

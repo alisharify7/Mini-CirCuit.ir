@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: "redis"
+    restart: always
+    expose: 
+      - "6379"
+    ports: 
+      - "6379:6379"
+
+  app:
+    build: .
+    container_name: "app"
+    restart: always
+    depends_on:
+      redis:
+        condition: service_started
+      db:
+        condition: service_started
+    expose:
+      - "8000"
+
+  db:
+      image: mysql
+      restart: always
+      environment:
+        MYSQL_DATABASE: mini
+        MYSQL_ROOT_PASSWORD: 123654
+      expose: 
+        - "3306"
+      volumes:
+        - db_data:/var/lib/mysql
+  
+
+  nginx:
+    build: ./docker/nginx/
+    container_name: "nginx"
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
+
+
+
+
+
+volumes:
+  db_data:

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    سفارش از خارج‌ |
+    Mini Circuits | {{ _('فروش برد های الکترونیکی در ایران') }}
+{% endblock title %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ "foreign-purchase/css/style.css" | StorageUrl }}">
+    {% include 'utils/owl-carousel.html' %}
+{% endblock style %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    {% from 'macros.html' import CompaniesSliderLogos %}
+
+    <section class="container persian-font">
+        <div class="row justify-content-center align-items-center my-3 my-md-5">
+            <div class="col-md-10 col-11 mt-3">
+                <div>
+                    <h3 class="text-dark my-2">خرید از سایت های خارجی</h3>
+                    <p style="text-align: justify">با توجه به حساس بودن
+                        برخی پروژه های الکترونیکی، بالا بودن هزینه های طراحی و تولید و وجود قطعات کپی در بازار، برخی
+                        کاربران علاقمند به تهیه این قطعات به صورت اورجینال از فروشگاه های معتبری مانند <span class="text-primary">Mouser</span>, <span class="text-danger">Digikey</span>,
+                        mini circuits و ... می باشند. این خرید در بیشتر مواقع مقرون به صرفه بوده و ریسک کمتری دارد.
+                        به دلیل تحریم های کشور امکان خرید و ارسال مستقیم این قطعات به داخل کشور مقدور نمی باشد. اما ما
+                        برای شما این کار را انجام داده و با توجه به سابقه و تجربه ی بالای خود، می توانیم خرید و سفارش
+                        گذاری قطعات شما را به صورت مستقیم از تمامی شرکت ها و یا فروشگاه های معتبر در سرتاسر جهان تامین
+                        کنیم. بدون دردسرهای واریزی ارز، گمرک و ... و بدون هرگونه تغییری در بسته ارسالی، سفارش شما به
+                        دستتان می‌رسد. جهت انجام سفارش کافی است لیست قطعات به صورت فایل اکسل و یا لینک آن را برای ما
+                        ارسال نمایید و اگر توضیح خاصی مد نظر دارید درج کنید. برای یک بار خرید از سایت های معتبر و شرکت
+                        های اصلی را با ما تجربه کنید.</p>
+                </div>
+            </div>
+        <div class="col-md-10 col-11">
+         <hr class="bg-primary text-primary py-1">
+        </div>
+            <div class="col-md-10 col-11">
+                <form method="post" action="" enctype="multipart/form-data" dir="rtl" id="OrderOutForm">
+                    {{ form.hidden_tag() }}
+                    <label>{{ form.Name.label }}</label>
+                    {{ form.Name() }}
+                    {% if form.Name.errors %}
+                        <ul>
+                            {% for err in form.Name.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <label>{{ form.Quantity.label }}</label>
+                    {{ form.Quantity() }}
+                    {% if form.Quantity.errors %}
+                        <ul>
+                            {% for err in form.Quantity.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <label>{{ form.Link.label }}</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" ><i class="bi bi-link-45deg"></i></span>
+                        {{ form.Link() }}
+                    </div>
+                    {% if form.Link.errors %}
+                        <ul>
+                            {% for err in form.Link.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <label>{{ form.Description.label }}</label>
+                    {{ form.Description() }}
+                    {% if form.Description.errors %}
+                        <ul>
+                            {% for err in form.Description.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <div dir="rtl" class="form-check form-switch d-flex justify-content-between align-items-center p-0 m-0 my-3 cursor-pointer">
+                        <label class="form-check-label m-0 p-0" for="attachment-file">ارسال فایل پیوست</label>
+                        <input class="form-check-input fs-4" type="checkbox" role="switch" id="attachment-file">
+                    </div>
+                    <div class="my-3 d-none" dir="ltr" id="file-container">
+                        {{ form.File() }}
+                    </div>
+                    {% if form.File.errors %}
+                        <ul>
+                            {% for err in form.File.errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+
+                    {% if request.is_authenticated %}
+                        <div class="captcha my-2 d-flex justify-content-center align-items-center">
+                        {{
+                                captcha.render_captcha(
+                                    model_name='g-captcha3',
+                                    ParentFormID='OrderOutForm',
+                                    class=form.Submit.render_kw.get('class'),
+                                    BtnText=form.Submit.render_kw.get('value')
+                                )
+                        }}
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login_get', next=url_for('web.outer_order.index_get') ) }}"
+                           class="btn btn-primary w-100 fs-5">{{ _('ابتدا وارد حساب کاربری خود شوید') }}</a>
+                    {% endif %}
+
+                </form>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3 my-md-5">
+                <div class="card shadow-md box-hover-able cursor-pointer">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-bag-heart text-warning" style="font-size: 6rem !important;"></i>
+                        <p class="h3">از تمامی برند های معتبر</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3 my-md-5">
+                <div class="card shadow-md box-hover-able cursor-pointer">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-cash-coin text-warning" style="font-size: 6rem !important;"></i>
+                        <p class="h3">قیمت به صرفه</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3 my-md-5">
+                <div class="card shadow-md box-hover-able cursor-pointer">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-airplane-engines text-warning" style="font-size: 6rem !important;"></i>
+                        <p class="h3">ارسال سریع و امن</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3 my-md-5">
+                <div class="card shadow-md box-hover-able cursor-pointer">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-clock-history text-warning" style="font-size: 6rem !important;"></i>
+                        <p class="h3">پشتیبانی 24 ساعته</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 my-5">
+                {{ CompaniesSliderLogos() }}
+            </div>
+
+        </div>
+    </section>
+
+    {% include 'components/footer.html' %}
+    {% include 'components/mobile-navbar.html' %}
+{% endblock content %}
+
+
+{% block script %}
+    <script>
+        const have_file = document.querySelector("#attachment-file");
+        const file_container = document.querySelector("#file-container");
+        have_file.addEventListener("change", e=>{
+            if (have_file.checked){
+                file_container.classList.remove("d-none")
+            }else{
+                file_container.classList.add("d-none")
+            }
+        })
+    </script>
+{% endblock script %}

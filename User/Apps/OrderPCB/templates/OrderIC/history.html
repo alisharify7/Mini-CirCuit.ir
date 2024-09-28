@@ -1,0 +1,59 @@
+{% extends 'user/base.html' %}
+
+
+{% block title %}
+    سفارشات PCB
+{% endblock title %}
+
+
+{% block style %}
+    <!--Ticket History js -->
+    <script src="{{ url_for('user.Serve', filename='/assets/js/history-stencil-orders.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    {% include 'utils/sweetalert.html' %}
+
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-4 my-md-5">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-11">
+                    <h2 class="text-center my-3">{{ _('سابقه سفارشات') }}</h2>
+                </div>
+                <div class="col-12">
+                    No data found
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <div id="modal-order" class="modal fade persian-font">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <span>{{ _('کد پیگیری') }}: <span id="TrackingCode"></span> </span>
+                </div>
+                <div class="modal-body p-1" style="max-height: 450px;">
+                    <div>
+                        <table class="table table-responsive table-bordered ">
+                            <tbody id="modalOrderTbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-dismiss="modal">{{ _('خروج') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+
+{% block script %}
+
+{% endblock script %}

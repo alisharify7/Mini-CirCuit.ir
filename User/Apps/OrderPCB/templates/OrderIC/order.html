@@ -1,0 +1,55 @@
+{% extends 'user/base.html' %}
+
+
+{% block title %}
+    PCB سفارش
+{% endblock title %}
+
+
+{% block style %}
+    <style>
+        .blink-text {
+            animation: BLINK_TEXT infinite;
+            animation-duration: 1s;
+        }
+
+
+        @keyframes BLINK_TEXT {
+            56% {
+                color: transparent;
+            }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <section>
+        <div class="container-fluid persian-font my-3">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12">
+                    <h1 class="text-center my-3">سفارش خرید <span class="text-danger">PCB</span></h1>
+                    <div class="price-result-container d-none alert alert-primary  my-2 shadow-sm ">
+                        <p class="price_handler border-primary border-bottom pb-3 blink-text persian-font"></p>
+                        <p class="day_handler m-0 persian-font"></p>
+                        <div class="message persian-font mt-2"></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <form  method="POST" action="{{ url_for('user.orderPCB.index_post') }}" class="row" enctype="multipart/form-data" id="orderPCBform">
+                    {% include 'components/pcb-form.html' %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+
+{% block script %}
+    <script>
+    const form = document.querySelector("#orderPCBform");
+    const url = `{{ url_for('web.orderPCB.calculator_post') }}`;
+    </script>
+    <script src="{{ 'pcb/js/validate_pcb_form.js' | StorageUrl }}"></script>
+    <script src="{{ url_for('user.Serve', filename='assets/js/order_pcb.js') }}"></script>
+{% endblock script %}

@@ -1,0 +1,150 @@
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, BIGINT, TEXT
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from Core.extensions import db
+from Core.model import BaseModel
+
+# AdminsPermission = db.Table(
+#     BaseModel.SetTableName("admins-permission"),
+#     Column("AdminID", ForeignKey(BaseModel.SetTableName("admins") + ".id")),
+#     Column("PermissionID", ForeignKey(BaseModel.SetTableName("permissions") + ".id"))
+# )
+#
+#
+# class PERMISSION_TABLE:
+#     ADMIN = 1
+#     USER = 2
+#
+#     # STAFF
+#     MANAGE_USERS = 3
+#     MANAGE_TICKETS = 4
+#     MANAGE_SITE_CONTENT = 5
+#
+#     default_permissions = [
+#         {"Permission": "ADMIN", "Description": "admin , all "},
+#         {"Permission": "USER", "Description": "a normal user ..."},
+#
+#         # staff
+#         {"Permission": "MANAGE_USERS", "Description": "add - update - delete - edit users"},
+#         {"Permission": "MANAGE_TICKETS", "Description": "read,answer tickets"},
+#         {"Permission": "MANAGE_SITE_CONTENT", "Description": "manage products - manage index sliders news and ..."},
+#     ]
+#
+#
+# class Permission(BaseModel, PERMISSION_TABLE):
+#     """
+#      Permission Handler Table
+#
+#         backref=GetAdmin
+#     """
+#     __tablename__ = BaseModel.SetTableName("permissions")
+#     Permission = Column(String(256), unique=True, nullable=False)
+#     Description = Column(String(1024), unique=False, nullable=False)
+#
+#     def init_permissions(self):
+#         for each in self.default_permissions:
+#             p = Permission()
+#             p.Permission = each['Permission']
+#             p.Description = each['Description']
+#             p.SetPublicKey()
+#             p.id = getattr(self, p.Permission)
+#             if not p.id:
+#                 raise RuntimeError(f"id for {p.Permission} not found")
+#             if p.save(show_traceback=True):
+#                 print(f"{p} saved in db")
+#             else:
+#                 db.session.rollback()
+#                 print(f"exception for  {p}")
+#
+#     def __str__(self):
+#         return f"<Permission: {self.Permission}-{self.id}>"
+#
+#     def __repr__(self):
+#         return self.__str__()
+#
+
+class Admin(BaseModel):
+    __tablename__ = BaseModel.SetTableName("admins")
+
+    Username = Column(String(256), unique=True, nullable=False)
+    Password = Column(String(162), unique=False, nullable=False)
+    Email = Column(String(512), unique=True, nullable=False)
+    PhoneNumber = Column(String(14), unique=True, nullable=False)
+    Active = Column(Boolean, default=False)
+    TryNumber = Column(Integer, default=0)
+
+    Posts = db.relationship("Post", backref="GetAdmin", lazy="dynamic")
+
+    def setPassword(self, password: str) -> None:
+        self.Password = generate_password_hash(password, method='scrypt')
+
+    def checkPassword(self, password: str) -> bool:
+        return check_password_hash(password=password, pwhash=self.Password)
+
+    def setUsername(self, username: str) -> bool:
+        if db.session.execute(db.select(Admin).filter_by(Username=username)).scalar_one_or_none():
+            return False
+        else:
+            self.Username = username
+            return True
+
+    def setPhonenumber(self, phone: str) -> bool:
+        if db.session.execute(db.select(Admin).filter_by(PhoneNumber=phone)).scalar_one_or_none():
+            return False
+        else:
+            self.PhoneNumber = phone
+            return True
+
+    def setEmail(self, email: str) -> bool:
+        if db.session.execute(db.select(Admin).filter_by(Email=email)).scalar_one_or_none():
+            return False
+        else:
+            self.Email = email
+            return True
+
+    def canLogin(self):
+        return self.TryNumber < 5
+
+    def setLog(self, ip: str, action: str):
+        log = AdminLog()
+        log.SetIPaddress(ip)
+        log.SetPublicKey()
+        log.Action = action
+        log.SetAdminID(self.id)
+        return log.save()
+
+    logs = db.relationship("AdminLog", backref='GetAdmin', lazy='dynamic')
+
+    def __str__(self):
+        return f"<Admin: {self.Username}-{self.id}>"
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class AdminLog(BaseModel):
+    __tablename__ = BaseModel.SetTableName("admins-log-table")
+    IP = Column(BIGINT, unique=False, nullable=False)
+    AdminID = Column(Integer, ForeignKey(BaseModel.SetTableName("admins") + '.id'))
+    Action = Column(TEXT, nullable=True, unique=False)
+
+    def SetIPaddress(self, ip: str):
+        """Set integer value of IP address"""
+        import ipaddress
+        try:
+            ip = ipaddress.ip_address(ip)
+            self.IP = int(ip)
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return True
+
+    def SetAdminID(self, admin_id: int):
+        self.AdminID = admin_id
+
+    def __str__(self):
+        return f"<AdminLog: {self.AdminID}-{self.IP}-{self.Action[:20]}>"
+
+    def __repr__(self):
+        return self.__str__()

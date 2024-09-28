@@ -1,0 +1,8 @@
+.box-hover-able {
+    transition: all 0.3s;
+    transform: scale(100%);
+}
+.box-hover-able:hover {
+    border-color: var(--main-blue);
+    box-shadow: inset 0 0 0 2px var(--main-blue),0 0 20px rgb(40 96 230 / 8%)
+}

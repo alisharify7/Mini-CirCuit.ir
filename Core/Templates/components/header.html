@@ -1,0 +1,111 @@
+<!-- navbar -->
+<div class="w-100 persian-font text-white sticky-top shadow" style="background-color: black">
+    <div class="row justify-content-center align-items-center w-100 m-0 p-0 shadow-sm">
+        <div class="col-lg-10 col-md-11 col-12">
+            <nav class="navbar navbar-expand-md fs-6 d-flex flex-row-reverse">
+                <a href="{{ url_for('web.index_get') }}" class="navbar-brand mx-3">
+                    <img src="{{ renderLogo() | StorageUrl }}" data-aos="zoom-in" style="width: auto; height: 30px"
+                         alt="Logo" class="p-0 m-0"/>
+                </a>
+
+                <div id="navbar-burger-menu" class="d-md-none" data-bs-toggle="collapse"
+                     data-bs-target="#navbar-header">
+                    <div class="line1 my-1 bg-primary"></div>
+                    <div class="line2 my-1 bg-primary"></div>
+                    <div class="line3 my-1 bg-primary"></div>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-header">
+                    <ul class="navbar-nav p-sm-0 p-0 w-100 fs-6 ">
+                        <li class="nav-item ">
+                            <a href="{{ url_for('web.index_get') }}"
+                               class="nav-link text-white">صفحه اصلی</a>
+                        </li>
+
+                        <li class="nav-item dropdown-center fs-6 " dir="rtl">
+                            <button class="nav-link dropdown-toggle text-white mt-1" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <span>سفارش</span>
+                            </button>
+
+                            <ul class="dropdown-menu mx-3 mx-md-0 text-muted">
+                                <li>
+                                    <a class="dropdown-item text-muted d-flex justify-content-between align-content-center"
+                                       href="{{ url_for('web.orderPCB.pcb_get') }}">
+                                        <span>سفارش برد مدار چاپی</span>
+                                        <span><i class="fa-solid fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider m-0 p-0"></li>
+                                <li >
+                                    <a onclick="UnderDevelopment(); return false;"
+                                       class="dropdown-item text-muted d-flex justify-content-between align-content-center"
+                                       href="">
+                                        <span>سفارش استنسیل</span>
+                                        <span><i class="fa-solid fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item dropdown-center fs-6 " dir="rtl">
+                            <button class="nav-link dropdown-toggle text-white mt-1" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <span>خدمات</span>
+                            </button>
+
+                            <ul class="dropdown-menu mx-3 mx-md-0 text-muted">
+
+
+                                <li>
+                                    <a class="dropdown-item text-muted d-flex justify-content-between align-content-center"
+                                       href="{{ url_for('web.services_electronic_design_get') }}">
+                                        <span>طراحی الکترونیک</span>
+                                        <span><i class="fa-solid fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider m-0 p-0"></li>
+
+                                <li >
+                                    <a class="dropdown-item text-muted d-flex justify-content-between align-content-center"
+                                       href="{{ url_for('web.services_mechanical_design_get') }}">
+                                        <span>طراحی مکانیک</span>
+                                        <span><i class="fa-solid fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider m-0 p-0"></li>
+                                <li >
+                                    <a class="dropdown-item text-muted d-flex justify-content-between align-content-center"
+                                       href="{{ url_for('web.services_assemble_line_get') }}">
+                                        <span>خدمات مونتاژ ماشینی و دستی</span>
+                                        <span><i class="fa-solid fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ url_for('auth.login_get') }}" class="nav-link text-white">ورود</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="{{ url_for('web.outer_order.index_get') }}"
+                               class="nav-link text-white">سفارش از خارج</a>
+                        </li>
+
+                        <li class="nav-item ms-1 ms-md-auto">
+                            <a target="_blank" href="{{ ShopURL() }}" data-aos="zoom-in"
+                               class="nav-link text-white btn btn-primary">فروشگاه</a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- end of navbar -->

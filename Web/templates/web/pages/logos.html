@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ _('لوگو های شاتل') }}
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+    <section class="persian-font">
+        <div class="container-fluid">
+            <div class="my-5 row justify-content-center align-items-center">
+                <div class="col-10 ">
+                    <h2 class="text-orange" data-aos="fade-left">{{ _('لوگو های برند شاتل') }}</h2>
+                </div>
+                <div class="col-10" data-aos="fade-right">
+                    <p class="mt-3">{{ _('سایت mini-circuits.ir با نام های تجاری mini-circuits.ir مشغول فعالیت می باشد') }}</p>
+                    <p>{{ _('لوگو های تجاری لوگو های زیر هستند و سایر لوگو ها نامعتبر می باشند') }}</p>
+                </div>
+                <div class="d-flex flex-column justify-content-center align-items-center col-md-6 col-10 my-3 my-md-5">
+                    <img src="{{ "media/logo/logo.png" | StorageUrl }}" class="rounded shadow img-thumbnail"
+                         style="width: 340px">
+                    <a href="{{ 'media/logo/logo.png' | StorageUrl }}"
+                       class="btn btn-primary my-3 px-5 py-2 fs-5">{{ _('دانلود') }}</a>
+                </div>
+                <div class="d-flex flex-column justify-content-center align-items-center col-md-6 col-10 my-3 my-md-5">
+                    <img src="{{ "media/logo/left-logo.png" | StorageUrl }}" class="rounded shadow img-thumbnail"
+                         style="width: 340px">
+                    <a href="{{ 'media/logo/left-logo.png' | StorageUrl }}"
+                       class="btn btn-primary my-3 px-5 py-2 fs-5">{{ _('دانلود') }}</a>
+                </div>
+                <div class="d-flex flex-column justify-content-center align-items-center col-md-6 col-10 my-3 my-md-5">
+                    <img src="{{ "media/logo/right-logo.png" | StorageUrl }}" class="rounded shadow img-thumbnail"
+                         style="width: 340px">
+                    <a href="{{ "media/logo/right-logo.png" | StorageUrl }}"
+                       class="btn btn-primary my-3 px-5 py-2 fs-5">{{ _('دانلود') }}</a>
+                </div>
+
+                <div class="d-flex flex-column justify-content-center align-items-center col-md-6 col-10 my-3 my-md-5">
+                    <img src="{{ "media/logo/top-logo.png" | StorageUrl }}" class="rounded shadow img-thumbnail"
+                         style="width: 340px">
+                    <a href="{{ "media/logo/top-logo.png" | StorageUrl }}"
+                       class="btn btn-primary my-3 px-5 py-2 fs-5">{{ _('دانلود') }}</a>
+                </div>
+
+                <div class="d-flex flex-column justify-content-center align-items-center col-md-6 col-10 my-3 my-md-5">
+                    <img src="{{ "media/logo/logo-light.png" | StorageUrl }}" class="rounded shadow img-thumbnail"
+                         style="width: 340px">
+                    <a href="{{ "media/logo/logo-light.png" | StorageUrl }}"
+                       class="btn btn-primary my-3 px-5 py-2 fs-5">{{ _('دانلود') }}</a>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+    {% include 'components/footer.html' %}
+    {% include 'components/mobile-navbar.html' %}
+
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

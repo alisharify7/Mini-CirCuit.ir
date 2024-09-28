@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+    محاسبه آنلاین قیمت برد مدارچاپی
+{% endblock title %}
+
+{% block style %}
+    <style>
+        .blink-text {
+            animation: BLINK_TEXT infinite;
+            animation-duration: 1s;
+        }
+
+
+        @keyframes BLINK_TEXT {
+            56% {
+                color: transparent;
+            }
+        }
+    </style>
+    {% include 'utils/sweetalert.html' %}
+{% endblock style %}
+
+{% block content %}
+    {% include 'components/header.html' %}
+
+    <section class="persian-font my-5">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center ">
+
+                <h2 class="text-center">محاسبه آنلاین قیمت <span class="text-primary fw-bold">مدار چاپی</span></h2>
+                <div class="price-result-container d-none alert alert-primary col-12 col-sm-11 col-lg-8 my-2 shadow-sm ">
+                    <p class="price_handler border-primary border-bottom pb-3 blink-text persian-font"></p>
+                    <p class="day_handler m-0 persian-font"></p>
+                    <div class="message persian-font mt-2"></div>
+                </div>
+                <div class="col-12 col-sm-11 col-lg-8 blink-text alert alert-danger m-0">
+                    <p class="m-0">برای مشاهده قیمت لحظه ای لطفا تمام مقادیر خواسته شده را انتخاب نمایید.</p>
+                    <p class="m-0">سپس بر روی دکمه ی مشاهده قیمت کلیک کنید</p>
+                </div>
+
+                <form class="col-12 col-lg-8 row mt-4" id="calculator" method="post"
+                      action="{{ url_for('web.orderPCB.calculator_post') }}">
+                    {% include 'components/pcb-form.html' %}
+                </form>
+
+                <div class="col-12 col-sm-11 col-lg-8 alert alert-warning my-3">
+                    <p>توجه برای سفارش باید وارد حساب کاربری خود شوید و اقدام به سفارش مدارچاپی کنید</p>
+                    <p>برای ورود به حساب کاربری از این <a href="{{ url_for('user.orderPCB.index_get') }}">لینک</a>
+                        استفاده کنید</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    {% include 'components/footer.html' %}
+    {% include 'components/mobile-navbar.html' %}
+
+{% endblock content %}
+
+{% block script %}
+    <script src="{{ 'pcb/js/validate_pcb_form.js' | StorageUrl }}"></script>
+    <script>
+        const form = document.querySelector("#calculator");
+
+
+
+        async function submitForm(e) {
+            e.preventDefault();
+            let is_form_valid = validateForm();
+            if (!is_form_valid) {
+                alert("برخی موارد به درستی وارد نشده است")
+                return
+            }
+            formdata = createFormData(getinputs(hidden=true));
+            const container = document.querySelector(".price-result-container");
+            let result = await push_data(data=formdata);
+
+            if (result.code == 200) {
+                container.classList.add("d-none");
+                show_price_and_day(price=result.data.price, day=result.data.day, message=result.data.message)
+                Swal.fire({
+                    icon: "success",
+                    confirmButtonText: "باشه",
+                    html: document.querySelector(".price-result-container").innerHTML,
+                })
+            }
+            else
+            {
+            Swal.fire({
+                    icon: "error",
+                    confirmButtonText: "باشه",
+                    html: html_error_parser(result.data.message),
+                }).then(result => {
+                    if (result.isConfirmed)
+                        location.reload()
+                })
+
+            }
+
+        }
+
+
+        validateForm();
+        watch_keyboard_and_validateForm();
+        form.addEventListener("submit", submitForm);
+
+    </script>
+{% endblock script %}
