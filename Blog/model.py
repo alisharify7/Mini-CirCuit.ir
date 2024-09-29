@@ -28,32 +28,41 @@ class Tag(BaseModel):
     Name: so.Mapped[str] = so.mapped_column(sa.String(512), nullable=False, unique=True)
 
 
-
 Post2Tag = db.Table(
     BaseModel.SetTableName("posts2tags"),
-    sa.Column("PostID", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("posts") + ".id")),
-    sa.Column("TagID", sa.Integer, sa.ForeignKey(Tag.id))
+    sa.Column(
+        "PostID", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("posts") + ".id")
+    ),
+    sa.Column("TagID", sa.Integer, sa.ForeignKey(Tag.id)),
 )
 
 
 class Post(BaseModel):
     __tablename__ = BaseModel.SetTableName("posts")
 
-    AuthorID: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(Admin.id), nullable=False,
-                                                unique=False)  # writer -> admin
-    Title: so.Mapped[str] = so.mapped_column(sa.String(512), nullable=False, unique=True, index=True)
+    AuthorID: so.Mapped[int] = so.mapped_column(
+        sa.Integer, sa.ForeignKey(Admin.id), nullable=False, unique=False
+    )  # writer -> admin
+    Title: so.Mapped[str] = so.mapped_column(
+        sa.String(512), nullable=False, unique=True, index=True
+    )
     Content: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-    Images: so.Mapped[str] = so.mapped_column(sa.JSON, nullable=False, unique=False, default=json.dumps([]))
-    Slug: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=True, index=True)  # short url
+    Images: so.Mapped[str] = so.mapped_column(
+        sa.JSON, nullable=False, unique=False, default=json.dumps([])
+    )
+    Slug: so.Mapped[str] = so.mapped_column(
+        sa.String(256), nullable=False, unique=True, index=True
+    )  # short url
 
     ShortIntro: so.Mapped[str] = so.mapped_column(sa.Text, unique=False, nullable=False)
-    ReadingTime: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False, unique=False,
-                                                   default=lambda: secrets.randbits(k=5))
+    ReadingTime: so.Mapped[int] = so.mapped_column(
+        sa.Integer, nullable=False, unique=False, default=lambda: secrets.randbits(k=5)
+    )
 
     Tags = so.relationship("Tag", secondary=Post2Tag, backref="GetPost", lazy="dynamic")
 
     def setSlug(self, slug_length: int = 6) -> bool:
-        """Set unique slug for post """
+        """Set unique slug for post"""
         counter = 0
         while True:
             if counter == 100:
@@ -78,13 +87,13 @@ class Post(BaseModel):
     def get_image_at(self, index: int) -> str:
         """return post image base of index"""
         images = self.get_images()
-        if len(images) <= index: # no image
+        if len(images) <= index:  # no image
             return "No-image-Found"
 
         return images[index]
 
     def get_images(self):
-        """return all images """
+        """return all images"""
         return json.loads(self.Images)
 
     def make_url(self):
@@ -102,5 +111,5 @@ class Post(BaseModel):
             "title": self.Title,
             "slug": self.Slug,
             "title-url": self.Title.replace(" ", "-"),
-            "short-intro": self.ShortIntro
+            "short-intro": self.ShortIntro,
         }

@@ -1,5 +1,6 @@
 # framework
 from flask import render_template, request, flash, redirect
+
 # lib
 from flask_babel import lazy_gettext as _l
 
@@ -7,6 +8,7 @@ import Core.utils as CoreUtils
 import User.form as UserForm
 from Auth.model import StenCilOrder
 from Config import Setting
+
 # apps
 from Core.extensions import db
 from User.utils import login_required
@@ -17,9 +19,7 @@ from . import OrderStencil
 @login_required
 def index_get():
     """Users panel -> menu -> order stencil panel"""
-    ctx = {
-        "orderStencilPage": "active"
-    }
+    ctx = {"orderStencilPage": "active"}
     form = UserForm.StenCilOrderForm()
     return render_template("Orderstencil/order.html", ctx=ctx, form=form)
 
@@ -28,22 +28,25 @@ def index_get():
 @login_required
 def index_post():
     """Order stencil for user"""
-    ctx = {
-        "orderStencilPage": "active"
-    }
+    ctx = {"orderStencilPage": "active"}
     form = UserForm.StenCilOrderForm()
     if not form.validate():
-        flash(_l('برخی مقادیر به درستی ارسال نشده اند'), "danger")
+        flash(_l("برخی مقادیر به درستی ارسال نشده اند"), "danger")
         return render_template("Orderstencil/order.html", ctx=ctx, form=form)
 
     address = request.user_object.Address
     if not address:
-        flash(_l("آدرسی برای حساب کاربری شما ثبت نشده است ابتدا آدرس خود را در حساب کاربری خود کامل کنید"), "danger")
+        flash(
+            _l(
+                "آدرسی برای حساب کاربری شما ثبت نشده است ابتدا آدرس خود را در حساب کاربری خود کامل کنید"
+            ),
+            "danger",
+        )
         return redirect(request.referrer)
 
     if not form.SIZE.data.startswith(form.TYPE.data):
-        form.SIZE.errors.append(_l('سایز و نوع یکسان نمی باشد'))
-        form.TYPE.errors.append(_l('سایز و نوع یکسان نمی باشد'))
+        form.SIZE.errors.append(_l("سایز و نوع یکسان نمی باشد"))
+        form.TYPE.errors.append(_l("سایز و نوع یکسان نمی باشد"))
         flash(_l("نوع و سایز درخواستی یکسان نمی باشد"), "danger")
         return render_template("Orderstencil/order.html", ctx=ctx, form=form)
 
@@ -73,16 +76,15 @@ def index_post():
 @OrderStencil.route("/history/", methods=["GET"])
 @login_required
 def history_get():
-    ctx = {
-        "OrderHistoryPage": "active"
-    }
+    ctx = {"OrderHistoryPage": "active"}
     page = request.args.get(key="page", default=1, type=int)
     records = db.paginate(
         select=db.select(StenCilOrder)
         .filter(StenCilOrder.UserID == request.user_object.id)
         .order_by(StenCilOrder.CreatedTime.desc()),
         per_page=10,
-        page=page)
+        page=page,
+    )
 
     ctx["records"] = records
     ctx["current_page"] = page
@@ -101,7 +103,10 @@ def get_order_stencil_api():
     select = db.select(StenCilOrder).filter(StenCilOrder.PublicKey == key)
     stencil_db = db.session.execute(select).scalar_one_or_none()
     if not stencil_db:
-        return {"status": "failed", "message": "رکوردی با کد پیگیری وارد شده یافت نشد"}, 400
+        return {
+            "status": "failed",
+            "message": "رکوردی با کد پیگیری وارد شده یافت نشد",
+        }, 400
 
     stencil_db.File = stencil_db.File if not stencil_db.File else stencil_db.File[33:]
     data = {
@@ -114,7 +119,7 @@ def get_order_stencil_api():
         "request": stencil_db.OtherRequest,
         "file": stencil_db.File,
         "address": stencil_db.Address,
-        "identifier": key
+        "identifier": key,
     }
     user = {
         "identifier": request.user_object.Email,
@@ -124,5 +129,5 @@ def get_order_stencil_api():
         "data": data,
         "user": user,
         "x-token-tracker": True,
-        "x-request-id": "http; x-request-id; set 1; done"
+        "x-request-id": "http; x-request-id; set 1; done",
     }, 200

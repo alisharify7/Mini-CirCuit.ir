@@ -1,6 +1,7 @@
 from Core.extensions import RedisServer
 from Core.utils import generate_random_string
 
+
 def generate_newsletter_confirm_token():
     while True:
         token = generate_random_string(64)
@@ -22,13 +23,17 @@ def redis_get_newsletter_token(newsletter_token):
         return result.decode()
     else:
         return result
+
+
 def redis_exists_newsletter_mail(email):
     prefix = f"NewsLetterEmail:{email}"
     return RedisServer.exists(prefix)
 
+
 def redis_exists_newsletter_token(email):
     prefix = f"NewsLetterEToken:{email}"
     return RedisServer.exists(prefix)
+
 
 def redis_ttl_newsletter_mail(email):
     prefix = f"NewsLetterEmail:{email}"
@@ -38,10 +43,9 @@ def redis_ttl_newsletter_mail(email):
     else:
         return result
 
+
 def redis_delete_newsletter_token_email(newsletter_token, email):
     prefix = f"NewsLetterToken:{newsletter_token}"
     RedisServer.delete(prefix)
     prefix = f"NewsLetterEmail:{email}"
     RedisServer.delete(prefix)
-
-

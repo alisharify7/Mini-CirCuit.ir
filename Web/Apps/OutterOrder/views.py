@@ -6,6 +6,7 @@ from .form import RegisterOrderAboardForm
 from Auth.Access import login_required
 from Core.utils import make_file_name_secure
 
+
 @blp.route("/", methods=["GET"])
 def index_get():
     """return blp register order page"""
@@ -21,24 +22,15 @@ def index_post():
     if not form.validate():
         return render_template("OutterOrder/order-aboard.html", form=form)
 
-    if not current_app.extensions['captcha2'].is_verify():
+    if not current_app.extensions["captcha2"].is_verify():
         form.Description.errors.append("کپچا به درستی وارد نشده است")
         flash("کپچا به درستی وارد نشده است", "danger")
         return render_template("OutterOrder/order-aboard.html", form=form)
 
-
-
     order_type = OrderTypes.get_order(type="buy-aboard")
     order = Order()
 
-    if (file := request.files.get(form.File.name)):
+    if file := request.files.get(form.File.name):
         file_name = make_file_name_secure(file.filename)
     if file:
         order.set_files(file_name)
-
-
-
-
-
-
-

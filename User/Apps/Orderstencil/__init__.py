@@ -1,7 +1,7 @@
 from flask import Blueprint
 
 OrderStencil = Blueprint(
-    'orderstencil',
+    "orderstencil",
     __name__,
     template_folder="templates",
     static_folder="static",

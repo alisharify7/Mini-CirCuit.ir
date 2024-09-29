@@ -53,7 +53,7 @@ def login_required(f):
 
 
 def only_reset_password(f):
-    """Only reset password users """
+    """Only reset password users"""
 
     @wraps(f)
     def inner(*args, **kwargs):
@@ -68,6 +68,7 @@ def only_reset_password(f):
         return f(*args, **kwargs)
 
     return inner
+
 
 def admin_login_required(f):
     """Base Login required Decorator for admins"""

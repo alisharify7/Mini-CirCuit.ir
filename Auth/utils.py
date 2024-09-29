@@ -5,14 +5,16 @@ from flask import session
 from Core.extensions import RedisServer
 from .model import User
 
-def login_user(user:User) -> None:
+
+def login_user(user: User) -> None:
     """
     login users to their account, set values in their session
     """
     session["login"] = True
     session["account-id"] = user.id
-    session["password"] = user.Password # hash value
+    session["password"] = user.Password  # hash value
     session.permanent = True  # SET session lifetime
+
 
 def login_admin(admin) -> None:
     """
@@ -26,7 +28,7 @@ def login_admin(admin) -> None:
 
 def generate_random_text(length: int = 120):
     """
-        this function generate random text str(uuid)
+    this function generate random text str(uuid)
     """
     uuids = [str(uuid.uuid4()).replace("-", "") for i in range((length // 32) + 1)]
     return "".join(uuids)[:length]
@@ -34,16 +36,16 @@ def generate_random_text(length: int = 120):
 
 def set_activation_token_slug_redis(key: str, value: str, expire: int = 900):
     """
-        Set activation slug for user in redis
-        set activation base on Token Slug and email value
-        Args:
-            key:str: activation slug
-            value:str: users email address
-            expire:int: expire timr for this entry (in seconds)
+    Set activation slug for user in redis
+    set activation base on Token Slug and email value
+    Args:
+        key:str: activation slug
+        value:str: users email address
+        expire:int: expire timr for this entry (in seconds)
 
-        example:
-        "ActivateAccountToken:2c10e053b20243f6b4beab7524e1f0c843949b9e172d42568a0fd6430ad714cb875276962a6548ee9c3635c0e06e31116cdb97d400324a0b9bf3bc17"
-        value: users email│
+    example:
+    "ActivateAccountToken:2c10e053b20243f6b4beab7524e1f0c843949b9e172d42568a0fd6430ad714cb875276962a6548ee9c3635c0e06e31116cdb97d400324a0b9bf3bc17"
+    value: users email│
 
     """
     # 900 second is 15 minute
@@ -66,17 +68,17 @@ def get_activation_token_slug_redis(key: str) -> str:
 
 def set_activation_email_slug_redis(key: str, value: str, expire: int = 900):
     """
-        Set activation slug for user in redis
-        set activation base on Token Slug and email value
-        Args:
-            key:str: activation slug
-            value:str: users email address
-            expire:int: expire timr for this entry (in seconds)
+    Set activation slug for user in redis
+    set activation base on Token Slug and email value
+    Args:
+        key:str: activation slug
+        value:str: users email address
+        expire:int: expire timr for this entry (in seconds)
 
-        example:
-        "ActivateAccountEmail:alisharifyofficial@gmail.com
-        value: 2c10e053b20243f6b4beab7524e1f0c843949b9e172d42568a0fd6430ad714cb875276962a6548ee9c3635c0e06e31116cdb97d400324a0b9bf3bc17"
-        value is reset password token
+    example:
+    "ActivateAccountEmail:alisharifyofficial@gmail.com
+    value: 2c10e053b20243f6b4beab7524e1f0c843949b9e172d42568a0fd6430ad714cb875276962a6548ee9c3635c0e06e31116cdb97d400324a0b9bf3bc17"
+    value is reset password token
     """
     # 900 second is 15 minute
     keyRedis = f"ActivateAccountEmail:{key}"
@@ -164,8 +166,7 @@ def gen_and_set_activation_slug(email: str, length: int = 120):
 
 
 def set_reset_slug_redis(token: str, email: str, expire: int = 7200):
-    """
-    """
+    """ """
     # 60 second / 60*60 second in minute / 3600 one house in second /  7200 second 2 hour in minute
 
     tokenRedisPrefix = f"ResetPasswordToken:{token}"  # show witch token belong to which email: get users email address from url in reset token
@@ -180,7 +181,7 @@ def get_reset_password_number(email: str):
     if not result:
         return 0
     else:
-        result = result.decode('utf-8')
+        result = result.decode("utf-8")
         return int(result)
 
 
@@ -195,7 +196,7 @@ def increase_reset_password_number(email: str):
     if not result:
         result = 1
     else:
-        result = result.decode('utf-8')
+        result = result.decode("utf-8")
         result = int(result) + 1
 
     return RedisServer.set(name=keyRedis, value=result, ex=(60 * 60) * 7)

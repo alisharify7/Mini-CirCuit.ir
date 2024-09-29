@@ -12,7 +12,7 @@ from Auth.Access import login_required
 @order.route("/pcb/", methods=["POST"])
 @login_required
 def register_pcb_order_post():
-    """ register a pcb order for user """
+    """register a pcb order for user"""
     form = OrderICForm()
     # there is no need captcha for order,
     if not form.validate():
@@ -20,4 +20,3 @@ def register_pcb_order_post():
         return redirect(url_for(""))
 
     user = request.user_object
-

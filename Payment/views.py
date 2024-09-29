@@ -8,13 +8,14 @@ idpay = IDPayAPI(
     domain="http://localhost:8000",
 )
 
+
 @payment.get("/")
 def payment(request):
     payer = {
         "name": "علی شریفی",
         "mail": "alisharifyofficial@gmail.com",
-        "phone":"09331016879",
-        "desc": "تست توضیحات"
+        "phone": "09331016879",
+        "desc": "تست توضیحات",
     }
     x = idpay.payment(
         order_id="5565565x565c",

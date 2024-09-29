@@ -5,12 +5,11 @@ from . import admin
 from .utils import admin_login_required
 
 
-
 @admin.route("/AdminStatic/<path:filename>", methods=["GET"])
 @admin_login_required
 def Serve(filename):
     """
-        Serve Static file only to admins that logged in to their account
+    Serve Static file only to admins that logged in to their account
     """
     static = current_app.config.get("BASE_DIR") / "Admin" / "private_static"
     if os.path.exists(os.path.join(static, filename)):
@@ -23,7 +22,5 @@ def Serve(filename):
 @admin_login_required
 def index_get():
     """admin index"""
-    ctx = {
-        "dashboard": "active"
-    }
+    ctx = {"dashboard": "active"}
     return render_template("admin/index.html", ctx=ctx)

@@ -12,9 +12,10 @@ from celery import shared_task
 from flask import Flask, current_app, request, session
 from werkzeug.utils import secure_filename as werkzeug_secure_filename
 
+
 def userLocalSelector():
     """
-        this function select user local base on session
+    this function select user local base on session
     """
     try:
         return session.get("language", "fa")
@@ -35,7 +36,7 @@ def get_next_page(fall_back_url: str):
 
 
 def generate_random_string(length: int = 6) -> str:
-    """generate random strings base on uuid.uuid4() """
+    """generate random strings base on uuid.uuid4()"""
     if 0 < length <= 32:
         return str(uuid.uuid4().hex.replace("-", ""))[:length]
 
@@ -45,7 +46,7 @@ def generate_random_string(length: int = 6) -> str:
     return random_string[:length]
 
 
-def make_file_name_secure(name: str, round:int=3):
+def make_file_name_secure(name: str, round: int = 3):
     """This function make sure a file name is secure
     remove dangerous characters and add  uuid to first of file name
     """
@@ -57,7 +58,7 @@ def make_file_name_secure(name: str, round:int=3):
 def celery_init_app(app: Flask) -> Celery:
     class FlaskTask(Task):
         """Every time a task is added to queue
-         __call__ ...
+        __call__ ...
         """
 
         def __call__(self, *args: object, **kwargs: object) -> object:
@@ -71,6 +72,7 @@ def celery_init_app(app: Flask) -> Celery:
     app.extensions["celery"] = celery_app
     return celery_app
 
+
 def compress_image(image, quality: int = 50):
     """
     compress image size
@@ -82,9 +84,16 @@ def compress_image(image, quality: int = 50):
     image.save(image, optimize=True, quality=quality)
     return True
 
+
 @shared_task(store_result=True)
-def add_watermark(logo_full_path: str, filename, outputname: str, position="bottomleft", scale: int = 15,
-                  padding: int = 5):
+def add_watermark(
+    logo_full_path: str,
+    filename,
+    outputname: str,
+    position="bottomleft",
+    scale: int = 15,
+    padding: int = 5,
+):
     """
     github: repo https://github.com/theitrain/watermark
     Add a watermark to images in the specified directory.
@@ -104,14 +113,16 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
     try:
         original_logo = Image.open(logo_full_path)
     except UnidentifiedImageError:
-        print(f"Failed to read logo from {logo_full_path}. Ensure it's a valid image format.")
+        print(
+            f"Failed to read logo from {logo_full_path}. Ensure it's a valid image format."
+        )
         return back(False)
     except Exception as e:
         print(f"An error occurred: {e}")
         return back(False)
 
     # Check if the logo has an alpha channel
-    if original_logo.mode == 'RGBA':
+    if original_logo.mode == "RGBA":
         logo_mask_original = original_logo.split()[3]
     else:
         logo_mask_original = None
@@ -148,16 +159,21 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
 
     paste_x, paste_y = 0, 0
 
-    if position == 'topleft':
+    if position == "topleft":
         paste_x, paste_y = padding, padding
-    elif position == 'topright':
+    elif position == "topright":
         paste_x, paste_y = imageWidth - new_logo_width - padding, padding
-    elif position == 'bottomleft':
+    elif position == "bottomleft":
         paste_x, paste_y = padding, imageHeight - new_logo_height - padding
-    elif position == 'bottomright':
-        paste_x, paste_y = imageWidth - new_logo_width - padding, imageHeight - new_logo_height - padding
-    elif position == 'center':
-        paste_x, paste_y = (imageWidth - new_logo_width) // 2, (imageHeight - new_logo_height) // 2
+    elif position == "bottomright":
+        paste_x, paste_y = (
+            imageWidth - new_logo_width - padding,
+            imageHeight - new_logo_height - padding,
+        )
+    elif position == "center":
+        paste_x, paste_y = (imageWidth - new_logo_width) // 2, (
+            imageHeight - new_logo_height
+        ) // 2
 
     try:
         image.paste(logo, (paste_x, paste_y), logo_mask)
@@ -166,15 +182,24 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
         return back(False)
 
     # Check if the image mode is 'RGBA' and convert it to 'RGB'
-    if image.mode != 'RGBA':
-        image = image.convert('RGBA')
+    if image.mode != "RGBA":
+        image = image.convert("RGBA")
 
     filenames = []
     IMAGEquality = 95
     uniqueCode = uuid.uuid4().hex + uuid.uuid4().hex
-    for h, w in [[128, 64], [256, 128], [480, 256], [640, 480], [720, 640], [1080, 720], [1920, 1080], [3000, 2000]]:
+    for h, w in [
+        [128, 64],
+        [256, 128],
+        [480, 256],
+        [640, 480],
+        [720, 640],
+        [1080, 720],
+        [1920, 1080],
+        [3000, 2000],
+    ]:
         new_image = image.resize((h, w))
-        name = f'{w}x{h}-{outputname}'
+        name = f"{w}x{h}-{outputname}"
         save_path = current_app.config.get("PRODUCT_IMAGE_STORAGE") / name
         new_image.save(save_path, optimize=True, quality=IMAGEquality)
         IMAGEquality -= 5
@@ -185,12 +210,13 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
 
     return pickle.dumps(filenames)
 
+
 class TimeStamp:
     """
-        a base class for working with time&times in app
-        ~!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~
-        #todo :
-            add some utils for calculate and some stuff like that on date and times
+    a base class for working with time&times in app
+    ~!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~
+    #todo :
+        add some utils for calculate and some stuff like that on date and times
     """
 
     __now_gregorian = None
@@ -248,8 +274,8 @@ class TimeStamp:
     @staticmethod
     def is_persian_date(date: str) -> bool:
         """
-            This function take a  date in format of string
-            and check its valid jalali persian date or not
+        This function take a  date in format of string
+        and check its valid jalali persian date or not
         """
         date = date.split("/")
         if len(date) == 3:
@@ -264,7 +290,7 @@ class TimeStamp:
 
     def convert_jlj2_georgian_d(self, value: khayyam.JalaliDate):
         """
-            this method get a khayyam date<jalali> and convert it to gregorian object datetime.date
+        this method get a khayyam date<jalali> and convert it to gregorian object datetime.date
         """
         if not isinstance(value, khayyam.JalaliDate):
             raise ValueError(f"input {value} must be a khayyam.JalaliDate instance")
@@ -274,10 +300,12 @@ class TimeStamp:
 
     def convert_grg2_jalali_d(self, value: datetime.date):
         """
-            this method get a datetime.date object and convert it o khayyam object
+        this method get a datetime.date object and convert it o khayyam object
         """
         if not isinstance(value, datetime.date):
-            raise ValueError(f"input {value} - {type(value)} must be a Datetime.Date instance")
+            raise ValueError(
+                f"input {value} - {type(value)} must be a Datetime.Date instance"
+            )
 
         year, month, day = value.year, value.month, value.day
         date = self._gregorian_to_jalali(year, month, day)
@@ -285,44 +313,82 @@ class TimeStamp:
 
     def convert_jlj2_georgian_dt(self, value: khayyam.JalaliDatetime):
         """
-            this method get a khayyam date<jalali> and convert it to gregorian object datetime.datetime
+        this method get a khayyam date<jalali> and convert it to gregorian object datetime.datetime
         """
         if not isinstance(value, khayyam.JalaliDatetime):
             raise ValueError("input must be a khayyam.JalaliDatetime instance")
 
-        year, month, day, hour, minute, second, microsecond = value.year, value.month, value.day, value.hour, value.minute, value.second, value.microsecond
+        year, month, day, hour, minute, second, microsecond = (
+            value.year,
+            value.month,
+            value.day,
+            value.hour,
+            value.minute,
+            value.second,
+            value.microsecond,
+        )
         date = self._jalali_to_gregorian(year, month, day)
-        return datetime.datetime(year=date[0], month=date[1], day=date[2], hour=hour, minute=minute, second=second,
-                                 microsecond=microsecond)
+        return datetime.datetime(
+            year=date[0],
+            month=date[1],
+            day=date[2],
+            hour=hour,
+            minute=minute,
+            second=second,
+            microsecond=microsecond,
+        )
 
     def convert_grg2_jalali_dt(self, value: datetime.datetime):
         """
-            this method get a datetime.date object and convert it o khayyam.KhayyamDatetime object
+        this method get a datetime.date object and convert it o khayyam.KhayyamDatetime object
         """
-        year, month, day, hour, minute, second, microsecond = value.year, value.month, value.day, value.hour, value.minute, value.second, value.microsecond
+        year, month, day, hour, minute, second, microsecond = (
+            value.year,
+            value.month,
+            value.day,
+            value.hour,
+            value.minute,
+            value.second,
+            value.microsecond,
+        )
         date = self._gregorian_to_jalali(year, month, day)
-        return khayyam.JalaliDatetime(year=date[0], month=date[1], day=date[2], hour=hour, minute=minute, second=second,
-                                      microsecond=microsecond)
+        return khayyam.JalaliDatetime(
+            year=date[0],
+            month=date[1],
+            day=date[2],
+            hour=hour,
+            minute=minute,
+            second=second,
+            microsecond=microsecond,
+        )
 
     def _gregorian_to_jalali(self, gy, gm, gd):
         """
-            this method convert a Gregorian to a Jalali date
-            https://jdf.scr.ir/
+        this method convert a Gregorian to a Jalali date
+        https://jdf.scr.ir/
         """
         g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
-        if (gm > 2):
+        if gm > 2:
             gy2 = gy + 1
         else:
             gy2 = gy
-        days = 355666 + (365 * gy) + ((gy2 + 3) // 4) - ((gy2 + 99) // 100) + ((gy2 + 399) // 400) + gd + g_d_m[gm - 1]
+        days = (
+            355666
+            + (365 * gy)
+            + ((gy2 + 3) // 4)
+            - ((gy2 + 99) // 100)
+            + ((gy2 + 399) // 400)
+            + gd
+            + g_d_m[gm - 1]
+        )
         jy = -1595 + (33 * (days // 12053))
         days %= 12053
         jy += 4 * (days // 1461)
         days %= 1461
-        if (days > 365):
+        if days > 365:
             jy += (days - 1) // 365
             days = (days - 1) % 365
-        if (days < 186):
+        if days < 186:
             jm = 1 + (days // 31)
             jd = 1 + (days % 31)
         else:
@@ -332,43 +398,43 @@ class TimeStamp:
 
     def _jalali_to_gregorian(self, jy, jm, jd):
         """
-            this method convert a Jalali time to a Gregorian time
-            https://jdf.scr.ir/
+        this method convert a Jalali time to a Gregorian time
+        https://jdf.scr.ir/
         """
         jy += 1595
         days = -355668 + (365 * jy) + ((jy // 33) * 8) + (((jy % 33) + 3) // 4) + jd
-        if (jm < 7):
+        if jm < 7:
             days += (jm - 1) * 31
         else:
             days += ((jm - 7) * 30) + 186
         gy = 400 * (days // 146097)
         days %= 146097
-        if (days > 36524):
+        if days > 36524:
             days -= 1
             gy += 100 * (days // 36524)
             days %= 36524
-            if (days >= 365):
+            if days >= 365:
                 days += 1
         gy += 4 * (days // 1461)
         days %= 1461
-        if (days > 365):
-            gy += ((days - 1) // 365)
+        if days > 365:
+            gy += (days - 1) // 365
             days = (days - 1) % 365
         gd = days + 1
-        if ((gy % 4 == 0 and gy % 100 != 0) or (gy % 400 == 0)):
+        if (gy % 4 == 0 and gy % 100 != 0) or (gy % 400 == 0):
             kab = 29
         else:
             kab = 28
         sal_a = [0, 31, kab, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         gm = 0
-        while (gm < 13 and gd > sal_a[gm]):
+        while gm < 13 and gd > sal_a[gm]:
             gd -= sal_a[gm]
             gm += 1
         return [gy, gm, gd]
 
     def convert_string_jalali2_dateD(self, value: str) -> datetime.date:
         """
-            this Method converts a string (Persian Date) to datetime.date object
+        this Method converts a string (Persian Date) to datetime.date object
         """
         if not self.is_persian_date(value):
             raise ValueError("Input is not a valid date format YYYY/MM/DD")
@@ -379,11 +445,11 @@ class TimeStamp:
 
     def bigger_date(self, date1, date2):
         """
-           this method takes two dates and returns the biggest date
-            :params: date1, date2
-            - if both dates are equal return True
-            - if date1 is biggest return date1
-            - if date2 is biggest return date2
+        this method takes two dates and returns the biggest date
+         :params: date1, date2
+         - if both dates are equal return True
+         - if date1 is biggest return date1
+         - if date2 is biggest return date2
         """
         if date1 > date2:
             return date1
@@ -394,11 +460,11 @@ class TimeStamp:
 
     def smaller_date(self, date1, date2):
         """
-            this method takes two dates and returns the smallest date
-            :params: date1, date2
-            - if both dates are equal return True
-            - if date1 is smallest return date1
-            - if date2 is smallest return date2
+        this method takes two dates and returns the smallest date
+        :params: date1, date2
+        - if both dates are equal return True
+        - if date1 is smallest return date1
+        - if date2 is smallest return date2
         """
         if date1 < date2:
             return date1

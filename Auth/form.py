@@ -17,16 +17,18 @@ class FormFlask(FlaskForm):
         """
         data = self.Username.data
         from string import ascii_lowercase, digits
+
         ascii_lowercase = [each for each in ascii_lowercase]
         digits = [each for each in digits]
         valid_char = [*digits, *ascii_lowercase]
 
         for each in data:
             if each not in valid_char:
-                self.Username.errors = \
-                    ["فرمت ورودی اطلاعات نادرست است",
-                     'فرمت درست اطلاعات شامل موارد زیر است',
-                    "شامل اعداد و حروف انگلیسی"]
+                self.Username.errors = [
+                    "فرمت ورودی اطلاعات نادرست است",
+                    "فرمت درست اطلاعات شامل موارد زیر است",
+                    "شامل اعداد و حروف انگلیسی",
+                ]
                 return False
 
         return True
@@ -41,6 +43,7 @@ class FormFlask(FlaskForm):
 
 class LoginForm(FormFlask):
     """Login Users Form"""
+
     Username = StringField(
         validators=[
             DataRequired(message="وارد کردن داده در این فیلد الزامی است"),
@@ -48,13 +51,10 @@ class LoginForm(FormFlask):
             Length(
                 min=4,
                 max=128,
-                message="حداقل و حداکثر طول فیلد وارد شده باید 4-128 باشد"
-            )
+                message="حداقل و حداکثر طول فیلد وارد شده باید 4-128 باشد",
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder":"نام کاربری"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "نام کاربری"},
     )
 
     Password = PasswordField(
@@ -65,25 +65,22 @@ class LoginForm(FormFlask):
                 min=6,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 6-256 باشد",
-            )
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder":"گذرواژه"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "گذرواژه"},
     )
 
     Submit = SubmitField(
-
         render_kw={
-            "value": 'ورود با گذرواژه',
-            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0"
+            "value": "ورود با گذرواژه",
+            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0",
         }
     )
 
 
 class RegisterForm(FormFlask):
     """Register Users Form"""
+
     Username = StringField(
         validators=[
             DataRequired(message="وارد کردن داده در این فیلد الزامی است"),
@@ -92,12 +89,9 @@ class RegisterForm(FormFlask):
                 min=4,
                 max=128,
                 message=f"داقل و حداکثر طول فیلد وارد شده باید 4-128 باشد",
-            )
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder":"نام کاربری"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "نام کاربری"},
     )
 
     Password = PasswordField(
@@ -108,12 +102,9 @@ class RegisterForm(FormFlask):
                 min=6,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 6-256 باشد",
-            )
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder": "گذرواژه"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "گذرواژه"},
     )
 
     PasswordConfirm = PasswordField(
@@ -125,12 +116,9 @@ class RegisterForm(FormFlask):
                 min=6,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 6-256 باشد",
-            )
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder":"تکرار گذرواژه"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "تکرار گذرواژه"},
     )
 
     EmailAddress = EmailField(
@@ -142,19 +130,20 @@ class RegisterForm(FormFlask):
                 min=4,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 11-256 باشد",
-            )
+            ),
         ],
         render_kw={
             "class": "form-control my-2 py-2 text-start",
-            "placeholder": "آدرس ایمیل"
-        }
+            "placeholder": "آدرس ایمیل",
+        },
     )
 
     Submit = SubmitField(
         render_kw={
-            "value": 'ساخت حساب کاربری',
-            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0"
-        })
+            "value": "ساخت حساب کاربری",
+            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0",
+        }
+    )
 
 
 class ForgetPasswordForm(FlaskForm):
@@ -167,19 +156,20 @@ class ForgetPasswordForm(FlaskForm):
                 min=4,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 11-256 باشد",
-            )
+            ),
         ],
         render_kw={
             "class": "form-control my-2 py-2 text-start",
-            "placeholder":"آدرس ایمیل"
-        }
+            "placeholder": "آدرس ایمیل",
+        },
     )
 
     Submit = SubmitField(
         render_kw={
-            "value": 'بازنشانی گذرواژه',
-            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0"
-        })
+            "value": "بازنشانی گذرواژه",
+            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0",
+        }
+    )
 
 
 class SetNewPasswordForm(FlaskForm):
@@ -191,12 +181,12 @@ class SetNewPasswordForm(FlaskForm):
                 min=6,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 6-256 باشد",
-            )
+            ),
         ],
         render_kw={
             "class": "form-control my-2 py-2",
-            "placeholder":"گذرواژه",
-        }
+            "placeholder": "گذرواژه",
+        },
     )
 
     PasswordConfirm = PasswordField(
@@ -208,17 +198,15 @@ class SetNewPasswordForm(FlaskForm):
                 min=6,
                 max=256,
                 message=f"حداقل و حداکثر طول فیلد وارد شده باید 6-256 باشد",
-            )
+            ),
         ],
-        render_kw={
-            "class": "form-control my-2 py-2",
-            "placeholder":"تکرار گذرواژه"
-        }
+        render_kw={"class": "form-control my-2 py-2", "placeholder": "تکرار گذرواژه"},
     )
 
     Token = HiddenField()
     Submit = SubmitField(
         render_kw={
-            "value":'بازنشانی گذرواژه',
-            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0"
-        })
+            "value": "بازنشانی گذرواژه",
+            "class": "btn bg-main-blue text-white w-100 py-2 my-3 fs-5 border-0",
+        }
+    )

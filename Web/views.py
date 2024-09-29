@@ -2,8 +2,16 @@
 import os
 
 # framework
-from flask import send_from_directory, url_for,\
-    current_app, render_template, abort, redirect, request, flash
+from flask import (
+    send_from_directory,
+    url_for,
+    current_app,
+    render_template,
+    abort,
+    redirect,
+    request,
+    flash,
+)
 
 # lib
 from flask_babel import lazy_gettext as _l
@@ -20,12 +28,13 @@ from Core.email import sendNewsLetterMail
 
 @web.get("/Storage/<path:path>/")
 def ServeStorageFiles(path: os.path):
-    """ This view only serve files for development only!!"""
-    if current_app.config.get("DEBUG") and os.path.exists(current_app.config.get("STORAGE_DIR") / path):
+    """This view only serve files for development only!!"""
+    if current_app.config.get("DEBUG") and os.path.exists(
+        current_app.config.get("STORAGE_DIR") / path
+    ):
         return send_from_directory(current_app.config.get("STORAGE_DIR"), path)
     else:
         return "404", 404
-
 
 
 @web.route("/", methods=["GET"])
@@ -51,23 +60,22 @@ def logo_get():
     """
     return render_template("pages/logos.html")
 
+
 @web.route("/services/electronic-design/", methods=["GET"])
 def services_electronic_design_get():
-    """
-    """
+    """ """
     return render_template("services/electronic-design.html")
+
 
 @web.route("/services/assemble-line/", methods=["GET"])
 def services_assemble_line_get():
-    """
-    """
+    """ """
     return render_template("services/assembly-line.html")
 
 
 @web.route("/services/mechanical-design/", methods=["GET"])
 def services_mechanical_design_get():
-    """
-    """
+    """ """
     return render_template("services/mecanichal-design.html")
 
 
@@ -76,22 +84,26 @@ def faq_get():
     """
     this View return faq page
     """
-    faq_questions = [{"question": _l("آیا امکان خرید مستقیم از شاتل وجود دارد؟"),
-                      "answer": _l("آیا امکان خرید مستقیم از شاتل وجود دارد؟")} for i in range(20)]
+    faq_questions = [
+        {
+            "question": _l("آیا امکان خرید مستقیم از شاتل وجود دارد؟"),
+            "answer": _l("آیا امکان خرید مستقیم از شاتل وجود دارد؟"),
+        }
+        for i in range(20)
+    ]
     # TODO: read faq from db
     return render_template("pages/faq.html", question=faq_questions)
 
 
 @web.route("/contact-us/", methods=["GET"])
 def contact_us_get():
-    """
-    """
+    """ """
     return render_template("pages/contact-us.html")
+
 
 @web.route("/contact-us/", methods=["POST"])
 def contact_us_post():
-    """
-    """
+    """ """
     form = WebForm.ContactUsForm()
     if not form.validate():
         flash("برخی موارد به درستی وارد نشده است", "danger")
@@ -128,16 +140,12 @@ def proxy_get():
     return render_template("pages/proxies.html")
 
 
-
-
-
-
 @web.route("/register/newsletter/", methods=["POST"])
 def register_news_letter_post():
     """
     register new user in newsletter
     """
-    if not current_app.extensions['captcha3'].is_verify():
+    if not current_app.extensions["captcha3"].is_verify():
         flash("کپچا به درستی وارد نشده است", "danger")
         return redirect(request.referrer)
 
@@ -161,19 +169,12 @@ def register_news_letter_post():
     WebUtils.redis_set_newsletter_token(email=form.Email.data, newsletter_token=token)
 
     sendNewsLetterMail(
-        context={"token": token},
-        recipients=[form.Email.data],
-        async_celery=True
+        context={"token": token}, recipients=[form.Email.data], async_celery=True
     )
 
     flash("ایمیل مورد با موفقیت در صف عضویت خبرنامه قرار گرفت", "danger")
     flash("لطفا جهت تایید عضویت صندوق ورودی ایمیل خود را چک کنید", "danger")
     return redirect(request.referrer)
-
-
-
-
-
 
 
 @web.route("/confirm/newsletter/<string:token>", methods=["GET"])
@@ -182,18 +183,18 @@ def confirm_news_letter_get(token):
     if not UserEmail:
         abort(404)
 
-
     newsLetter = WebModel.NewsLetter()
     if not newsLetter.setEmail(UserEmail):
         flash("آدرس ایمیل در خبرنامه عضو می باشد.", "danger")
-        return redirect(url_for('web.index_get'))
+        return redirect(url_for("web.index_get"))
 
     newsLetter.SetPublicKey()
     if not newsLetter.save():
         flash("خطایی رخ داد. بعدا امتحان کنید", "danger")
-        return redirect(url_for('web.index_get'))
+        return redirect(url_for("web.index_get"))
 
-    WebUtils.redis_delete_newsletter_token_email(newsletter_token=token, email=UserEmail)
+    WebUtils.redis_delete_newsletter_token_email(
+        newsletter_token=token, email=UserEmail
+    )
     flash("ایمیل با موفقیت عضو خبرنامه شد", "danger")
-    return redirect(url_for('web.index_get'))
-
+    return redirect(url_for("web.index_get"))

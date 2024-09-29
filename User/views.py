@@ -7,8 +7,16 @@ from . import form as UserForm
 
 
 # framework
-from flask import (render_template, send_from_directory, request,
-                   flash, redirect, current_app, session, url_for)
+from flask import (
+    render_template,
+    send_from_directory,
+    request,
+    flash,
+    redirect,
+    current_app,
+    session,
+    url_for,
+)
 
 # app.project
 from Core.extensions import db
@@ -25,7 +33,7 @@ from lib.file import get_file_size
 @login_required
 def Serve(filename):
     """
-        Serve Static file only to users that logged in to their account
+    Serve Static file only to users that logged in to their account
     """
     static = current_app.config.get("BASE_DIR") / "User" / "private_static"
     if os.path.exists(os.path.join(static, filename)):
@@ -37,20 +45,16 @@ def Serve(filename):
 @user.route("/", methods=["GET"])
 @login_required
 def user_index():
-    """return users index dashboard panel """
-    ctx = {
-        "dashboard": "active"
-    }
+    """return users index dashboard panel"""
+    ctx = {"dashboard": "active"}
     return render_template("user/index.html", ctx=ctx)
 
 
 @user.route("/send-ticket/", methods=["GET"])
 @login_required
 def send_ticket_get():
-    """return send ticket page for users """
-    ctx = {
-        "send_ticket": "active"
-    }
+    """return send ticket page for users"""
+    ctx = {"send_ticket": "active"}
     form = UserForm.TicketForm()
     attachment_ext = current_app.config.get("TICKET_ATTACHMENT_EXT", ["zip"])
 
@@ -63,15 +67,14 @@ def send_ticket_get():
 @login_required
 def send_ticket_post():
     """send a ticket to support -> post"""
-    ctx = {
-        "send_ticket": "active"
-    }
+    ctx = {"send_ticket": "active"}
 
     form = UserForm.TicketForm()
     if not form.validate():
-        flash('برخی موارد به درستی وارد نشده است', "danger")
+        flash("برخی موارد به درستی وارد نشده است", "danger")
         current_app.logger.info(
-            msg=f"\nError for User: {request.user_object.getName(True)}\nForm Validate Error.\n\t{form.errors}\n")
+            msg=f"\nError for User: {request.user_object.getName(True)}\nForm Validate Error.\n\t{form.errors}\n"
+        )
         return render_template("user/send-ticket.html", ctx=ctx, form=form)
 
     ticket = Ticket()
@@ -82,16 +85,16 @@ def send_ticket_post():
 
     attachment_ext = current_app.config.get("TICKET_ATTACHMENT_EXT", ["zip"])
 
+    if file := request.files.get(form.File.name):
 
-
-    if (file := request.files.get(form.File.name)):
-
-        if get_file_size(file) > current_app.config.get("TICKET_ATTACHMENT_MAX_SIZE", 1024*1024*16):
+        if get_file_size(file) > current_app.config.get(
+            "TICKET_ATTACHMENT_MAX_SIZE", 1024 * 1024 * 16
+        ):
             flash("حجم فایل ارسالی بیشتر از حد تایین شده می باشد", "danger")
             flash("حداکثر حجم فایل ارسالی 16MB می باشد", "danger")
             return render_template("user/send-ticket.html", ctx=ctx, form=form)
 
-        if ("." in file.filename):
+        if "." in file.filename:
             f = file.filename.split(".")[-1]
             if f not in attachment_ext:
                 flash("پسوند فایل ارسالی پشتیبانی نمی شود", "danger")
@@ -102,7 +105,10 @@ def send_ticket_post():
             return render_template("user/send-ticket.html", ctx=ctx, form=form)
 
         file.filename = make_file_name_secure(file.filename)
-        file_path = current_app.config.get("TICKET_ATTACHMENT_DIR", "STORAGE_DIR") / file.filename
+        file_path = (
+            current_app.config.get("TICKET_ATTACHMENT_DIR", "STORAGE_DIR")
+            / file.filename
+        )
         file.save(file_path)
         ticket.File = file.filename
 
@@ -112,25 +118,27 @@ def send_ticket_post():
             os.remove(file_path)
 
         flash("خطایی رخ داد!", "danger")
-        return redirect(url_for('user.send_ticket_get'))
+        return redirect(url_for("user.send_ticket_get"))
     else:
         flash("عملیات با موفقیت انجام شد", "success")
-        return redirect(url_for('user.history_tickets_get'))
+        return redirect(url_for("user.history_tickets_get"))
 
 
 @user.route("/history-ticket/", methods=["GET"])
 @login_required
 def history_tickets_get():
     """return all ticket history"""
-    ctx = {
-        "history_ticket": "active"
-    }
+    ctx = {"history_ticket": "active"}
 
     page = request.args.get(key="page", default=1, type=int)
-    ctx["tickets"] = db.paginate(max_per_page=15, per_page=10, page=page,
-                                 select=db.select(Ticket) \
-                                 .filter(Ticket.UserID == request.user_object.id) \
-                                 .order_by(Ticket.CreatedTime.desc()))
+    ctx["tickets"] = db.paginate(
+        max_per_page=15,
+        per_page=10,
+        page=page,
+        select=db.select(Ticket)
+        .filter(Ticket.UserID == request.user_object.id)
+        .order_by(Ticket.CreatedTime.desc()),
+    )
     ctx["current_page"] = page
     return render_template("user/history-tickets.html", ctx=ctx)
 
@@ -138,29 +146,37 @@ def history_tickets_get():
 @user.route("/ticket-info/", methods=["POST"])
 @login_required
 def ticket_info_post():
-    """[API-view] return a ticket info """
+    """[API-view] return a ticket info"""
     ctx = {}
-    ticketID = request.form.get("TICKET_ID", None) # TICKET_ID -> ticket.PublicKey
+    ticketID = request.form.get("TICKET_ID", None)  # TICKET_ID -> ticket.PublicKey
     if not ticketID:
-        return {"status": "failed", "message": "برخی مقادیر به نظر گم شده اند!" + "TICKET_ID:string:missing"}, 400
+        return {
+            "status": "failed",
+            "message": "برخی مقادیر به نظر گم شده اند!" + "TICKET_ID:string:missing",
+        }, 400
 
-    query = db.select(Ticket) \
-        .filter_by(PublicKey=ticketID) \
+    query = (
+        db.select(Ticket)
+        .filter_by(PublicKey=ticketID)
         .filter_by(UserID=request.user_object.id)
+    )
 
     ticket = db.session.execute(query).scalar_one_or_none()
     if not ticket:
-        return {"status": "failed", "message":"تیکتی با شماره وارد شده یافت نشد"}, 404
-
+        return {"status": "failed", "message": "تیکتی با شماره وارد شده یافت نشد"}, 404
 
     data = {
         "ticket_number": ticket.id,
         "title": ticket.Title,
         "message": ticket.Caption,
-        "created_at": ticket.ConvertToJalali(obj_time=ticket.CreatedTime, full_time=True), #TODO: use Moment js instead
+        "created_at": ticket.ConvertToJalali(
+            obj_time=ticket.CreatedTime, full_time=True
+        ),  # TODO: use Moment js instead
         "answer": ticket.Answer or None,
         "answer_error": "پاسخی به تیکت مورد نظر داده نشده است",
-        "attachment": StorageUrl("TicketAttachment/"+ ticket.File) if ticket.File else None
+        "attachment": (
+            StorageUrl("TicketAttachment/" + ticket.File) if ticket.File else None
+        ),
     }
 
     return {"status": "success", "message": data}, 200
@@ -170,9 +186,7 @@ def ticket_info_post():
 @login_required
 def setting_get():
     """return setting page for users"""
-    ctx = {
-        "setting": "active"
-    }
+    ctx = {"setting": "active"}
 
     form = UserForm.Setting()
 
@@ -190,9 +204,7 @@ def setting_get():
 @login_required
 def setting_post():
     """update setting for users -> POST"""
-    ctx = {
-        "setting": "active"
-    }
+    ctx = {"setting": "active"}
 
     form = UserForm.Setting()
     if not form.validate():
@@ -201,7 +213,7 @@ def setting_post():
 
     user = request.user_object
     if form.Password.data:
-        if len(form.Password.data) >= 6: # TODO: use validate decorator in db layer
+        if len(form.Password.data) >= 6:  # TODO: use validate decorator in db layer
             user.setPassword(form.Password.data)
         else:
             form.Password.errors.append("حداقل طول گذرواژه باید 6 کاراکتر باشد")
@@ -222,7 +234,9 @@ def setting_post():
 
     if form.PhoneNumber.data and not (form.PhoneNumber.data == user.PhoneNumber):
         if not user.setPhonenumber(form.PhoneNumber.data):
-            form.PhoneNumber.errors.append("شماره تلفن همراه توسط کاربر دیگری گرفته شده است")
+            form.PhoneNumber.errors.append(
+                "شماره تلفن همراه توسط کاربر دیگری گرفته شده است"
+            )
             return render_template("user/setting.html", ctx=ctx, form=form)
 
     user.FirstName = form.FirstName.data
@@ -231,9 +245,7 @@ def setting_post():
     if not user.save():
         flash("خطایی رخ داد بعدا امتحان کنید", "danger")
     else:
-        session["password"] = user.Password # update hash password in session
+        session["password"] = user.Password  # update hash password in session
         flash("عملیات با موفقیت انجام شد", "success")
 
-    return redirect(url_for('user.setting_get'))
-
-
+    return redirect(url_for("user.setting_get"))

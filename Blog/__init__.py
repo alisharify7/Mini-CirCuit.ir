@@ -11,4 +11,5 @@ from . import model
 
 
 from .api import bp
+
 blog.register_blueprint(bp, url_prefix="/api/")

@@ -4,11 +4,12 @@ from Core.extensions import db
 from Auth.model import User
 from Config import Setting
 
+
 @pytest.fixture()
 def app():
-    """ Flask Main Application """
+    """Flask Main Application"""
     setting = Setting()
-    setting.SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:" # switch to memory
+    setting.SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"  # switch to memory
     setting.TESTING = True
     setting.SERVER_NAME = "localhost:5000"
     setting.GOOGLE_CAPTCHA_V2_CONF["CAPTCHA_ENABLED"] = False
@@ -16,9 +17,8 @@ def app():
 
     app = create_app(setting)
 
-
     def getUser():
-        if (u := User.query.filter_by(Email="test_user@user.com").first()):
+        if u := User.query.filter_by(Email="test_user@user.com").first():
             return u
         u = User()
         u.Email = "test_user@user.com"
@@ -40,5 +40,5 @@ def app():
 
 @pytest.fixture()
 def client(app):
-    """ Simple client for testing Flask application """
+    """Simple client for testing Flask application"""
     yield app.test_client()

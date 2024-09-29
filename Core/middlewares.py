@@ -1,6 +1,7 @@
 # framework
 
 from flask import Blueprint, request, redirect, url_for, flash, session, current_app
+
 # current app
 from Auth.model import User
 from Config import Setting
@@ -9,8 +10,7 @@ from Config import Setting
 from .utils import userLocalSelector
 from .extensions import db
 
-blp = Blueprint('base_views', __name__)
-
+blp = Blueprint("base_views", __name__)
 
 
 @blp.before_app_request
@@ -33,28 +33,28 @@ def set_user_statue():
 
 
     """
-    if ".js" not in request.url or ".css" not in request.url: # bypass all static media
+    if ".js" not in request.url or ".css" not in request.url:  # bypass all static media
         request.current_language = userLocalSelector()
         request.is_authenticated = session.get("login", False)
         try:
             request.user_object = db.session.execute(
-                db.select(User).filter_by(id=session.get("account-id", None))).scalar_one_or_none()
+                db.select(User).filter_by(id=session.get("account-id", None))
+            ).scalar_one_or_none()
         except Exception as e:
             request.user_object = None
 
-        request.real_ip = request.headers.get('X-Real-Ip', request.remote_addr)
+        request.real_ip = request.headers.get("X-Real-Ip", request.remote_addr)
 
 
 @blp.route("/lang/set/<string:language>/", methods=["GET"])
 def setUserLanguage(language):
     """
-        this view select a language in users session
+    this view select a language in users session
     """
-    location = (request.referrer or url_for('web.index_get'))
+    location = request.referrer or url_for("web.index_get")
     if language not in Setting.LANGUAGES:
         return redirect(location)
     else:
-        flash('زبان با موفقیت تغییر کرد', "success")
+        flash("زبان با موفقیت تغییر کرد", "success")
         session["language"] = language
         return redirect(location)
-

@@ -17,16 +17,18 @@ class BaseModel(db.Model):
      ~~~~~~~~~~~~~~ abstract model ~~~~~~~~~~~~~~~
 
     """
+
     __abstract__ = True
     # TODO: replace this with valid syntax for mariadb and mysql
     __table_args__ = {
-         'mysql_engine': 'InnoDB',
-         'mysql_charset': 'utf8',
-         'mysql_collate': 'utf8_persian_ci'
-     }
+        "mysql_engine": "InnoDB",
+        "mysql_charset": "utf8",
+        "mysql_collate": "utf8_persian_ci",
+    }
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     T = TimeStamp()
+
     @staticmethod
     def SetTableName(name):
         """Use This Method For setting a table name"""
@@ -34,7 +36,7 @@ class BaseModel(db.Model):
         return f"{DATABASE_TABLE_PREFIX_NAME}{name}".lower()
 
     def SetPublicKey(self):
-        """ This Method Set a Unique PublicKey """
+        """This Method Set a Unique PublicKey"""
         while True:
             token = uuid.uuid4().hex
             if self.query.filter(self.PublicKey == token).first():
@@ -44,7 +46,7 @@ class BaseModel(db.Model):
                 break
 
     def ConvertToJalali(self, obj_time, full_time=False) -> str:
-        """Convert to jalali time method """
+        """Convert to jalali time method"""
 
         print(obj_time)
         jalali = BaseModel.T.convert_grg2_jalali_dt(obj_time)
@@ -55,7 +57,7 @@ class BaseModel(db.Model):
 
     def save(self, show_traceback: bool = True):
         """
-         combination of two steps, add and commit session
+        combination of two steps, add and commit session
         """
         try:
             db.session.add(self)
@@ -68,9 +70,12 @@ class BaseModel(db.Model):
         else:
             return True
 
-    PublicKey: so.Mapped[str] = so.mapped_column(sa.String(36), nullable=False, unique=True)
-    CreatedTime: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                           default=datetime.datetime.utcnow)
-    LastUpdateTime: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                              onupdate=datetime.datetime.utcnow,
-                                                                              default=datetime.datetime.utcnow)
+    PublicKey: so.Mapped[str] = so.mapped_column(
+        sa.String(36), nullable=False, unique=True
+    )
+    CreatedTime: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, default=datetime.datetime.utcnow
+    )
+    LastUpdateTime: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, onupdate=datetime.datetime.utcnow, default=datetime.datetime.utcnow
+    )

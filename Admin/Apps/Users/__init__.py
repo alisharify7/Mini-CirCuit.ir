@@ -7,5 +7,3 @@ admin_users = Blueprint(
 )
 
 from . import views
-
-

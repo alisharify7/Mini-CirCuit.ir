@@ -16,7 +16,6 @@ class PCBLayerUtils:
         self.day = 0
         self.price = 0
 
-
     def get_price(self):
         if self.layer == 1:
             self.cons = 200  # constant price
@@ -41,7 +40,7 @@ class PCBLayerUtils:
 
         elif self.layer == 2:
             self.cons = 300
-            if  self.area > 0 and self.area <= 3.0:
+            if self.area > 0 and self.area <= 3.0:
                 self.price += (self.area) * 600
                 self.day += 6
             elif self.area >= 3.1 and self.area <= 10.0:
@@ -62,7 +61,7 @@ class PCBLayerUtils:
 
         elif self.layer == 4:
             self.cons = 800
-            if  self.area > 0 and self.area <= 3.0:
+            if self.area > 0 and self.area <= 3.0:
                 self.price += (self.area) * 850
                 self.day += 7
             elif self.area >= 3.1 and self.area <= 10.0:
@@ -83,7 +82,7 @@ class PCBLayerUtils:
 
         elif self.layer == 6:
             self.cons = 1500
-            if  self.area > 0 and self.area <= 3.0:
+            if self.area > 0 and self.area <= 3.0:
                 self.price += (self.area) * 1300
                 self.day += 8
             elif self.area >= 3.1 and self.area <= 10.0:
@@ -104,7 +103,7 @@ class PCBLayerUtils:
 
         elif self.layer == 8:
             self.cons = 1800
-            if  self.area > 0 and self.area <= 3.0:
+            if self.area > 0 and self.area <= 3.0:
                 self.price += (self.area) * 1700
                 self.day += 9
             elif self.area >= 3.1 and self.area <= 10.0:
@@ -125,6 +124,7 @@ class PCBLayerUtils:
 
         return {"price": self.price, "day": self.day, "constant_price": self.cons}
 
+
 class OrderICForm(FlaskForm):
     def validate(self):
         content = super().validate()
@@ -143,7 +143,6 @@ class OrderICForm(FlaskForm):
         # form.parse_errors()
         ...
 
-
     Length = IntegerField(
         label="عرض ( بر حسب میلی متر)",
         validators=[
@@ -151,10 +150,10 @@ class OrderICForm(FlaskForm):
             InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
-            "placeholder":"عرض بر حسب میلی متر mm",
-            "class":"form-control",
-            "style": "direction:rtl !important"
-        }
+            "placeholder": "عرض بر حسب میلی متر mm",
+            "class": "form-control",
+            "style": "direction:rtl !important",
+        },
     )
 
     Width = IntegerField(
@@ -162,13 +161,12 @@ class OrderICForm(FlaskForm):
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
             InputRequired(message="ورود داده در این فیلد الزامی است"),
-
         ],
         render_kw={
-            "placeholder":"طول بر حسب میلی متر mm",
-            "class":"form-control",
-            "style": "direction:rtl !important"
-        }
+            "placeholder": "طول بر حسب میلی متر mm",
+            "class": "form-control",
+            "style": "direction:rtl !important",
+        },
     )
 
     Quantity = IntegerField(
@@ -176,47 +174,48 @@ class OrderICForm(FlaskForm):
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
             InputRequired(message="ورود داده در این فیلد الزامی است"),
-            NumberRange(min=1, max=1000000, message="حداقل تعداد سفارش 1 و حداکثر 1000000 عدد می باشد")
+            NumberRange(
+                min=1,
+                max=1000000,
+                message="حداقل تعداد سفارش 1 و حداکثر 1000000 عدد می باشد",
+            ),
         ],
         render_kw={
             "placeholder": "تعداد درخواستی",
             "class": "form-control",
-            "style": "direction:rtl !important"
-        }
+            "style": "direction:rtl !important",
+        },
     )
     ThicknessCHOICES = {
-        "all": [0.5, 0.6,0.8, 1, 1.2, 1.6, 2],
-        "ratio": {
-            "2": 1.2,
-            "else": 1
-        }
+        "all": [0.5, 0.6, 0.8, 1, 1.2, 1.6, 2],
+        "ratio": {"2": 1.2, "else": 1},
     }
     Thickness = SelectField(
         label="ضخامت مدار چاپی (بر حسب میلی متر)",
         choices=[f"{each} mm" for each in ThicknessCHOICES.get("all", [])],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "ضخامت مدار چاپی(برحسب میلی متر)",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     LayerNumber = SelectField(
         label="تعداد لایه های برد",
-        choices=[f"{each} Layer" for each in [1,2,4,6,8]],
+        choices=[f"{each} Layer" for each in [1, 2, 4, 6, 8]],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "تعداد لایه",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     FiberType = SelectField(
@@ -224,36 +223,29 @@ class OrderICForm(FlaskForm):
         choices=["FR-4", "Other"],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "نوع فیبر مدار چاپی",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
-    MetalThicknessCHOICES = {
-        "all": [1, 2],
-        "ratio": {
-            "2": 1.2,
-            "1": 1,
-            "else": 1
-        }
-    }
+    MetalThicknessCHOICES = {"all": [1, 2], "ratio": {"2": 1.2, "1": 1, "else": 1}}
 
     MetalThickness = SelectField(
         label="ضخامت مس نهایی",
         choices=[f"{each} oz" for each in MetalThicknessCHOICES.get("all", [])],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "ضخامت مس",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     PanelStatusCHOICES = ["Panel", "Single"]
@@ -262,13 +254,13 @@ class OrderICForm(FlaskForm):
         choices=PanelStatusCHOICES,
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "نوع پنل مدار",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     FinalCover = SelectField(
@@ -276,13 +268,13 @@ class OrderICForm(FlaskForm):
         choices=["HASL", "COPPER", "ENIG"],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "نوع پوشش نهایی",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     PrintColor = SelectField(
@@ -290,13 +282,13 @@ class OrderICForm(FlaskForm):
         choices=["Green", "Yellow", "White", "Red", "Black/Dark", "Blue", "Orange"],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "رنگ جاپ مدار",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     ProductHelperColor = SelectField(
@@ -304,35 +296,31 @@ class OrderICForm(FlaskForm):
         choices=["White", "Yellow", "Green", "Red", "Black/Dark", "Blue", "Orange"],
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "رنگ چاپ راهنمای قطعات",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     LayerPositionCHOICES = {
         "all": ["Default", "Other"],
-        "ratio": {
-            "Default": 1,
-            "Other": 1.2,
-            "else": 1.2
-        }
+        "ratio": {"Default": 1, "Other": 1.2, "else": 1.2},
     }
     LayerPosition = SelectField(
         label="مدل لایه چینی",
         choices=LayerPositionCHOICES.get("all", []),
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "مدل لایه چینی",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     MicrosectionTest = SelectField(
@@ -341,13 +329,13 @@ class OrderICForm(FlaskForm):
         default="No",
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "تست میکروسکشن",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     ElectricalTest = SelectField(
@@ -356,31 +344,25 @@ class OrderICForm(FlaskForm):
         default="No",
         validators=[
             DataRequired(message="ورود داده در این فیلد الزامی است"),
-            InputRequired(message="ورود داده در این فیلد الزامی است")
+            InputRequired(message="ورود داده در این فیلد الزامی است"),
         ],
         render_kw={
             "placeholder": "تست الکتریکال",
             "class": "form-control text-muted",
-            "style": "direction:ltr !important"
-        }
+            "style": "direction:ltr !important",
+        },
     )
 
     File = FileField(
-        validators=[
-
-        ],
+        validators=[],
         render_kw={
             "class": "form-control mb-3",
             "placeholder": "فایل",
-        }
+        },
     )
 
-
     Submit = SubmitField(
-        render_kw={
-            "value" : "مشاهده قیمت",
-            "class": "btn btn-primary w-100 my-2"
-        }
+        render_kw={"value": "مشاهده قیمت", "class": "btn btn-primary w-100 my-2"}
     )
 
     def calculate_price(self):
@@ -392,9 +374,9 @@ class OrderICForm(FlaskForm):
         if cny_price:
             cny_price.decode("utf-8")
             cny_price = int(cny_price)
-            message+="<br>"+f"قیمت حال ارز چین: {cny_price}" + "<br>"
+            message += "<br>" + f"قیمت حال ارز چین: {cny_price}" + "<br>"
         else:
-            message+="قیمت ارز چین: عدم ارتباط با سرویس قیمت لحظه ای" + "<br>"
+            message += "قیمت ارز چین: عدم ارتباط با سرویس قیمت لحظه ای" + "<br>"
             cny_price = False
 
         qty = self.Quantity.data
@@ -404,14 +386,20 @@ class OrderICForm(FlaskForm):
         message += f"<br>مساحت تمام بردها:  مساحت یک برد * تعداد <br>"
         message += f"<br>مساحت تمام بردها: {area*qty}<br>"
 
-
         boardThickness = self.Thickness.data.split(" mm")[0]
-        boardThicknessRatio = self.ThicknessCHOICES.get("ratio")["else"] if boardThickness not in self.ThicknessCHOICES.get("ratio") else self.ThicknessCHOICES.get("ratio")[boardThickness]
+        boardThicknessRatio = (
+            self.ThicknessCHOICES.get("ratio")["else"]
+            if boardThickness not in self.ThicknessCHOICES.get("ratio")
+            else self.ThicknessCHOICES.get("ratio")[boardThickness]
+        )
         message += f"<br>ضریب ضخامت مدارچاپی: {boardThicknessRatio}<br>"
 
-
         metalThickness = self.MetalThickness.data.split(" oz")[0]
-        metal_ratio = self.MetalThicknessCHOICES.get("ratio")["else"] if metalThickness not in self.MetalThicknessCHOICES.get("ratio") else self.MetalThicknessCHOICES.get("ratio")[metalThickness]
+        metal_ratio = (
+            self.MetalThicknessCHOICES.get("ratio")["else"]
+            if metalThickness not in self.MetalThicknessCHOICES.get("ratio")
+            else self.MetalThicknessCHOICES.get("ratio")[metalThickness]
+        )
         message += f"<br>ضریب ضخامت مس نهایی: {metal_ratio}<br>"
 
         layer = self.LayerNumber.data.split(" Layer")[0]
@@ -420,8 +408,6 @@ class OrderICForm(FlaskForm):
         if not is_fiber_fr4:
             message += f"<br> نوع فیبر الباقی می باشد امکان دارد در قیمت نهایی کمی بیشتر باشد:  <br>"
 
-
-
         result = PCBLayerUtils(layer=layer, area=area)
         result = result.get_price()
         price += result["price"]
@@ -429,24 +415,28 @@ class OrderICForm(FlaskForm):
         day += result["day"]
 
         if self.FinalCover.data == "ENIG":
-            price += (140 * qty)
+            price += 140 * qty
             message += f"\پوشش نهایی ENIG می باشد 140 یوان به قیمت نهایی اضافه شد (به ازای هر عدد برد )<br>"
 
         if self.PrintColor.data.lower() != "green":
             message += f"\رنگ های به جز سبر مبلغ 40 یوان به قیمت اضافه می کند (به ازای هر عدد برد )<br>"
-            price += (40 * qty)
+            price += 40 * qty
 
         if self.ProductHelperColor.data.lower() != "white":
             message += f"\رنگ چاپ راهنمای قطعات به جز سفید شامل 20 یوان اضافه می باشد (به ازای هر عدد برد )<br>"
-            price += (20 * qty)
+            price += 20 * qty
 
         lazyerPosition = self.LayerPosition.data
-        lazyerPositionRatio = self.LayerPositionCHOICES.get("ratio")["else"] if lazyerPosition not in self.LayerPositionCHOICES.get("all") else self.LayerPositionCHOICES.get("ratio")[lazyerPosition]
+        lazyerPositionRatio = (
+            self.LayerPositionCHOICES.get("ratio")["else"]
+            if lazyerPosition not in self.LayerPositionCHOICES.get("all")
+            else self.LayerPositionCHOICES.get("ratio")[lazyerPosition]
+        )
         message += f"<br>ضریب لایه چینی: {lazyerPositionRatio}<br>"
 
         if self.MicrosectionTest.data.lower() == "yes":
             message += f"<br> تست میکروسکشن مبلغ 40 یوان به سفارش اضافه می کند (به ازای هر عدد برد ) <br>"
-            price += (40 )
+            price += 40
 
         price *= lazyerPositionRatio
         price *= metal_ratio
@@ -466,6 +456,4 @@ class OrderICForm(FlaskForm):
         else:
             price = f"{price} یوان چین "
 
-
         return (price, day, message)
-

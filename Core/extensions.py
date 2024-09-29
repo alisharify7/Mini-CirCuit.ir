@@ -10,12 +10,10 @@ from flask_wtf.csrf import CSRFProtect
 from Config import Setting
 
 
-
-RedisServer:redis.Redis = Setting.REDIS_DEFAULT_INTERFACE
+RedisServer: redis.Redis = Setting.REDIS_DEFAULT_INTERFACE
 db = SQLAlchemy()
 babel = Babel()
 csrf = CSRFProtect()
 ServerSession = Session()
 ServerMigrate = Migrate()
 ServerMail = Mail()
-

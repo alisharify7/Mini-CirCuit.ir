@@ -14,6 +14,3 @@ def get_latest_blog_post():
     query = db.session.query(Post).order_by(Post.CreatedTime.desc()).limit(10)
     result = db.session.execute(query)
     return [each.to_dict() for each in result], 200
-
-
-

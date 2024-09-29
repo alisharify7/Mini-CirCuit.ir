@@ -4,7 +4,7 @@ import sys
 
 def GetStdoutLogger(logger_name: str):
     """
-        return a stdout logger
+    return a stdout logger
     """
     formatter = logging.Formatter(
         "[APP-LOGGER <%(levelname)s> %(asctime)s]\n %(message)s\n %(module)s\nat line -%(lineno)d- in %(pathname)s "

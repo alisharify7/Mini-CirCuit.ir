@@ -3,7 +3,6 @@ this script automatically translate all _() texts to expected language
 TODO: refactor code :!!!!!
 """
 
-
 import datetime
 import os
 import pathlib
@@ -34,14 +33,14 @@ dictionary = {}
 startTime = time.time()
 
 
-def log(text:str) -> None:
+def log(text: str) -> None:
     """Logger function
-    
+
     Keyword arguments:
     text --  std.out
     Return: None
     """
-    
+
     print(f"[{datetime.datetime.utcnow()}] {text}")
 
 
@@ -79,11 +78,11 @@ print(os.system("pybabel extract -F babel.cfg -k _l -o ./translations/message.po
 
 log("Create catalog for each Language")
 for each in languages:
-    print(os.system(f"pybabel init -i ./translations/message.po -d ./translations -l {each}"))
-
-
-
-
+    print(
+        os.system(
+            f"pybabel init -i ./translations/message.po -d ./translations -l {each}"
+        )
+    )
 
 
 global counter
@@ -105,7 +104,7 @@ def translate(text, from_lang, to_lang):
         return text
     if text in dictionary[to_lang]:
         return dictionary[to_lang][text]
-        for each in ['MAX', 'ERROR']:
+        for each in ["MAX", "ERROR"]:
             if each in dictionary[to_lang][text].upper():
                 with open("txt.txt", "w", encoding="utf-8") as f:
                     f.write(text.strip())
@@ -116,7 +115,6 @@ def translate(text, from_lang, to_lang):
                 print(t)
                 exit()
                 dictionary[to_lang][text] = t
-
 
         return dictionary[to_lang][text]
 
@@ -183,18 +181,17 @@ for each in dirs:
                 t = f'msgid "{p}"'
                 text = translate(text=p, from_lang="fa", to_lang=lang)
 
-
                 print(f"[FROM fa]: {p}")
                 print(f"[TO {lang}]: {text}")
 
-                t += f"\nmsgstr \"{text}\"\n"
+                t += f'\nmsgstr "{text}"\n'
                 new_file += t
                 p = ""
             elif line.startswith("#"):
-                new_file +="\n" +line.strip().replace("\n", "")+"\n"
+                new_file += "\n" + line.strip().replace("\n", "") + "\n"
             else:
                 p += line
-                p = p.replace('"', '')
+                p = p.replace('"', "")
                 p = p.replace("\n", "")
                 p = p.strip()
 

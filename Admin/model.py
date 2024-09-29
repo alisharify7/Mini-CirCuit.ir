@@ -63,6 +63,7 @@ from Core.model import BaseModel
 #         return self.__str__()
 #
 
+
 class Admin(BaseModel):
     __tablename__ = BaseModel.SetTableName("admins")
 
@@ -76,27 +77,33 @@ class Admin(BaseModel):
     Posts = db.relationship("Post", backref="GetAdmin", lazy="dynamic")
 
     def setPassword(self, password: str) -> None:
-        self.Password = generate_password_hash(password, method='scrypt')
+        self.Password = generate_password_hash(password, method="scrypt")
 
     def checkPassword(self, password: str) -> bool:
         return check_password_hash(password=password, pwhash=self.Password)
 
     def setUsername(self, username: str) -> bool:
-        if db.session.execute(db.select(Admin).filter_by(Username=username)).scalar_one_or_none():
+        if db.session.execute(
+            db.select(Admin).filter_by(Username=username)
+        ).scalar_one_or_none():
             return False
         else:
             self.Username = username
             return True
 
     def setPhonenumber(self, phone: str) -> bool:
-        if db.session.execute(db.select(Admin).filter_by(PhoneNumber=phone)).scalar_one_or_none():
+        if db.session.execute(
+            db.select(Admin).filter_by(PhoneNumber=phone)
+        ).scalar_one_or_none():
             return False
         else:
             self.PhoneNumber = phone
             return True
 
     def setEmail(self, email: str) -> bool:
-        if db.session.execute(db.select(Admin).filter_by(Email=email)).scalar_one_or_none():
+        if db.session.execute(
+            db.select(Admin).filter_by(Email=email)
+        ).scalar_one_or_none():
             return False
         else:
             self.Email = email
@@ -113,7 +120,7 @@ class Admin(BaseModel):
         log.SetAdminID(self.id)
         return log.save()
 
-    logs = db.relationship("AdminLog", backref='GetAdmin', lazy='dynamic')
+    logs = db.relationship("AdminLog", backref="GetAdmin", lazy="dynamic")
 
     def __str__(self):
         return f"<Admin: {self.Username}-{self.id}>"
@@ -125,12 +132,13 @@ class Admin(BaseModel):
 class AdminLog(BaseModel):
     __tablename__ = BaseModel.SetTableName("admins-log-table")
     IP = Column(BIGINT, unique=False, nullable=False)
-    AdminID = Column(Integer, ForeignKey(BaseModel.SetTableName("admins") + '.id'))
+    AdminID = Column(Integer, ForeignKey(BaseModel.SetTableName("admins") + ".id"))
     Action = Column(TEXT, nullable=True, unique=False)
 
     def SetIPaddress(self, ip: str):
         """Set integer value of IP address"""
         import ipaddress
+
         try:
             ip = ipaddress.ip_address(ip)
             self.IP = int(ip)
